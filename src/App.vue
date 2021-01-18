@@ -289,11 +289,6 @@ export default {
       }
     }
 
-    onMounted(() => {
-      this.$ga.page('/');
-    });
-
-
 
     return{
       NValue,
