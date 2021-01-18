@@ -82,6 +82,7 @@ import Select from './components/Select'
 import {ref, computed, watch } from 'vue'
 import domtoimage from 'dom-to-image'
 
+
 export default {
   name: 'App',
   components: {
@@ -287,6 +288,10 @@ export default {
 
       }
     }
+
+    onMounted(() => {
+      this.$ga.page('/');
+    });
 
 
 
