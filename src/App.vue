@@ -102,17 +102,18 @@ export default {
     Filters
   },
   setup(){
-    let imageNames    = ["Mandala1", "Mandala2", "Mandala3", "Karina", "Amethyst", "Cuckoo", "Herbie", "Hilmar"].sort();
-    let selectedImage = ref("Mandala1");
+    let imageNames    = ["Karina", "Amethyst", "Cuckoo", "Herbie", "Hilmar", "Teapot", "Trumpet", "Flamingo", "Calavera"].sort();
+    let selectedImage = ref("Cuckoo");
     let images = {
-      Mandala1     : require("./images/Mandala1.jpg"),
-      Mandala2     : require("./images/Mandala2.jpg"),
-      Mandala3     : require("./images/Mandala3.jpg"),
       Karina       : require("./images/Karina.jpg"),
       Amethyst     : require("./images/Amethyst.jpg"),
       Cuckoo       : require("./images/Cuckoo.jpg"),
       Herbie       : require("./images/Herbie.jpg"),
       Hilmar       : require("./images/Hilmar.png"),
+      Teapot       : require("./images/Teapot.jpg"),
+      Trumpet       : require("./images/Trumpet.jpg"),
+      Flamingo       : require("./images/Flamingo.jpg"),
+      Calavera       : require("./images/Calavera.jpg"),
     };
 
     let showWelcome     = ref(true);
@@ -120,7 +121,7 @@ export default {
     let highlightDownload = ref(false);
     let highlightSettings = ref(false);
     let capture         = ref(null);
-    let selectedFileURL = ref(images.Mandala1);
+    let selectedFileURL = ref(images.Cuckoo);
     let imageURL        = computed( () => { if(selectedFileURL.value){ return selectedFileURL.value } } );
     let NValue          = ref(6);
     let rotateValue     = ref(60);
@@ -470,7 +471,7 @@ select {
 
 
 .imageContainer {
-  background-image:url(images/Mandala1.jpg);
+  background-image:url(images/Cuckoo.jpg);
   width:400px;
   height:400px;
   position:absolute;
