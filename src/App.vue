@@ -1,15 +1,24 @@
 <template>
+  <transition name="fade">
+  <div class="welcome-window" v-if="showWelcome">
+    <div class="welcome-content">
+      <h1>Mandala Generator</h1>
+      <span class="instructions" @mouseover="highlightUploadImage = true" @mouseout="highlightUploadImage = false">1. Upload an image(JPG, PNG, GIF), or use default image.</span><br><br>
+      <span class="instructions" @mouseover="highlightSettings = true" @mouseout="highlightSettings = false">2. Play around with the various settings available. Click & drag inside mandala to adjust position. </span><br><br>
+      <span class="instructions" @mouseover="highlightDownload = true" @mouseout="highlightDownload = false">3. Download Mandala.</span><br><br>
+      <button class="start-button" @click="startButton">Start</button>
+    </div>
+  </div>
+  </transition>
   <Filters></Filters>
   <transition name="fade">
-    <div class="settingsWindow" ref="settingsDiv" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
-      <Slider label="N"           :min="3"    :max="120"  v-model.number="NValue"        ></Slider>
-      <Slider label="sliceWidth"  :min="0.1"  :max="1000" v-model.number="sliceWidth"   :step="0.1" ></Slider>
-      <Slider label="sliceHeight" :min="0.1"  :max="1000" v-model.number="sliceHeight"  :step="0.1" ></Slider>
+    <div class="settingsWindow" ref="settingsDiv" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)" :class="{'highlighted':highlightSettings}">
+      <Slider label="Sectors"     :min="3"    :max="120"  v-model.number="NValue"        ></Slider>
+      <Slider label="Slice Width" :min="0.1"  :max="1000" v-model.number="sliceWidth"   :step="0.1" ></Slider>
+      <Slider label="Slice Height" :min="0.1" :max="1000" v-model.number="sliceHeight"  :step="0.1" ></Slider>
       <Slider label="Scale"       :min="0.01" :max="10"   v-model.number="scale"        :step="0.1" ></Slider>
       <Slider label="SliceAngle"  :min="0"    :max="100"  v-model.number="sliceAngle"   :step="0.1" ></Slider>
       <Slider label="Rotate"      :min="0"    :max="360"  v-model.number="rotateValue"  :step="0.1" ></Slider>
-      <Slider label="ImageX"      :min="0"    :max="500"  v-model.number="imgX"         :step="0.1" ></Slider>
-      <Slider label="ImageY"      :min="0"    :max="500"  v-model.number="imgY"         :step="0.1" ></Slider>
       <Slider label="Zoom"        :min="1"    :max="1000" v-model.number="zoom"         :step="0.1" ></Slider>
       <Slider label="Opacity"     :min="0"    :max="1"    v-model.number="opacity"      :step="0.01" ></Slider>
       <Slider label="Blur Image"  :min="0"    :max="100"  v-model.number="blur"         :step="1" ></Slider>
@@ -27,6 +36,7 @@
 
   <div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
     <div class="circleWrapper"
+         :class="{'highlighted':highlightSettings}"
          :style="{
             'overflow': isCircular ? 'hidden': 'initial',
             'width'   : sliceHeight*2*scale+'px',
@@ -56,8 +66,8 @@
   <transition name="fade">
     <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
       <input style="display: none" type="file" @change="onFileSelected" ref="fileInput" accept="image/x-png,image/gif,image/jpeg">
-      <button @click="$refs.fileInput.click()">Upload Image</button>
-      <Select label="Image" :options="imageNames" v-model="selectedImage" @change="onSelectImage"></Select>
+      <button @click="$refs.fileInput.click()" :class="{'highlighted':highlightUploadImage}">Upload Image</button>
+      <Select label="Defaults" :options="imageNames" v-model="selectedImage" @change="onSelectImage"></Select>
       <Select label="Blend Mode" :options="blendModes" v-model="blendMode"></Select>
       <Checkbox label="Circular" v-model="isCircular"></Checkbox>
       <div class="auto-align-container">
@@ -67,7 +77,7 @@
       <Checkbox label="Animate" v-model="isPlay"></Checkbox>
       <Checkbox label="Edge Detect" v-model="isEdgeDetect"></Checkbox>
       <Checkbox label="Turbulence" v-model="isTurbulence"></Checkbox>
-      <button @click="takeScreenshot">Download Image (PNG)</button>
+      <button @click="takeScreenshot" :class="{'highlighted':highlightDownload}">Download Mandala (PNG)</button>
     </div>
   </transition>
   <img width="75%" ref="screen">
@@ -105,7 +115,11 @@ export default {
       Hilmar       : require("./images/Hilmar.png"),
     };
 
-    let capture = ref(null);
+    let showWelcome     = ref(true);
+    let highlightUploadImage = ref(false);
+    let highlightDownload = ref(false);
+    let highlightSettings = ref(false);
+    let capture         = ref(null);
     let selectedFileURL = ref(images.Mandala1);
     let imageURL        = computed( () => { if(selectedFileURL.value){ return selectedFileURL.value } } );
     let NValue          = ref(6);
@@ -150,6 +164,7 @@ export default {
     let currentY   = ref(0);
     let isDragging = ref(false);
 
+    function startButton() { showWelcome.value = false; }
     function onFileSelected(e) { selectedFileURL.value = URL.createObjectURL(e.target.files[0]); }
     function onSelectImage(e)  { selectedFileURL.value = images[e.target.value]; }
     function imgImageURL() { return "url('"+imageURL.value+"')" }
@@ -326,6 +341,11 @@ export default {
       isEdgeDetect,
       isTurbulence,
       capture,
+      showWelcome,
+      highlightUploadImage,
+      highlightDownload,
+      highlightSettings,
+      startButton,
       onFileSelected,
       onSelectImage,
       alignRotation,
@@ -398,6 +418,57 @@ select {
   flex-direction: row;
 }
 
+.welcome-window {
+  width:80vh;
+  height:80vh;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  border:1px solid white;
+  z-index:99999;
+  border-radius:100%;
+  background-color:rgba(255, 255, 255, 0.8);
+}
+
+.welcome-content {
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  position:absolute;
+  width:60%;
+}
+
+.instructions {
+  font-size:1.2em;
+}
+
+.instructions:hover {
+  text-decoration: underline #6262db;
+}
+
+.start-button {
+  width:100px;
+  height:40px;
+  font-size: 1em;
+  color:white;
+  background-color: #005CC8;
+}
+
+.start-button:hover {
+  width:100px;
+  color:white;
+  background-color: #5594e2;
+}
+
+.start-button:active {
+  width:95px;
+  height:40px;
+  color:white;
+  background-color: #5594e2;
+}
+
+
 .imageContainer {
   background-image:url(images/Mandala1.jpg);
   width:400px;
@@ -449,7 +520,7 @@ select {
   padding: 0 20px;
   z-index:999;
   background-color: transparent;
-  padding-top:20px;
+  padding-top: 20px;
   position:absolute;
   right:0;
 
@@ -465,6 +536,12 @@ select {
   margin-right:50px;
   width:100px;
 }
+
+.highlighted {
+  outline: 2px dashed #6262db;
+
+}
+
 
 
 .fade-enter,
