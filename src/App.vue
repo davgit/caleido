@@ -33,41 +33,36 @@
 
     </div>
   </transition>
-  <Suspense>
-    <template #default>
-      <div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
-        <div class="circleWrapper"
-             :class="{'highlighted':highlightSettings}"
-             :style="{
-                'overflow': isCircular ? 'hidden': 'initial',
-                'width'   : sliceHeight*2*scale+'px',
-                'height'  : sliceHeight*2*scale+'px'
-        }">
-          <div
-              v-for="n in NValue"
-              :key="n" class="imageContainer"
-              @mousedown="startDrag($event)"
-              @wheel.prevent="scrollWheelZoom($event)"
-              :style="{
-                  'background-image'   : imgImageURL(),
-                  'width'              : imgWidth(),
-                  'height'             : imgHeight(),
-                  'transform'          : imgTransform(n),
-                  'clip-path'          : imgClipPath(),
-                  'background-position': imgBackgroundPosition(imgX/(zoom/100), imgY/(zoom/100)),
-                  'background-size'    : imageSize(),
-                  'mix-blend-mode'     : blendMode,
-                  'opacity'            : opacity,
-                  'filter'             : applyFilters()
-                }">
-          </div>
-        </div>
+
+  <div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
+    <div class="circleWrapper"
+         :class="{'highlighted':highlightSettings}"
+         :style="{
+            'overflow': isCircular ? 'hidden': 'initial',
+            'width'   : sliceHeight*2*scale+'px',
+            'height'  : sliceHeight*2*scale+'px'
+    }">
+      <div
+          v-for="n in NValue"
+          :key="n" class="imageContainer"
+          @mousedown="startDrag($event)"
+          @wheel.prevent="scrollWheelZoom($event)"
+          :style="{
+              'background-image'   : imgImageURL(),
+              'width'              : imgWidth(),
+              'height'             : imgHeight(),
+              'transform'          : imgTransform(n),
+              'clip-path'          : imgClipPath(),
+              'background-position': imgBackgroundPosition(imgX/(zoom/100), imgY/(zoom/100)),
+              'background-size'    : imageSize(),
+              'mix-blend-mode'     : blendMode,
+              'opacity'            : opacity,
+              'filter'             : applyFilters()
+            }">
       </div>
-    </template>
-    <template #fallback>
-      <div class="loading"> Loading image... </div>
-    </template>
-  </Suspense>
+    </div>
+  </div>
+
   <transition name="fade">
     <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
       <input style="display: none" type="file" @change="onFileSelected" ref="fileInput" accept="image/x-png,image/gif,image/jpeg">
@@ -541,15 +536,6 @@ select {
   margin-top:7px;
   margin-right:50px;
   width:100px;
-}
-
-.loading {
-  width:100px;
-  height:100px;
-  position:absolute;
-  transform: translate(-50%, -50%);
-  top:50%;
-  left:50;
 }
 
 .highlighted {
