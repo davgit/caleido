@@ -36,7 +36,6 @@
 
   <div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
     <div class="circleWrapper"
-         :class="{'highlighted':highlightSettings}"
          :style="{
             'overflow': isCircular ? 'hidden': 'initial',
             'width'   : sliceHeight*2*scale+'px',
