@@ -77,6 +77,7 @@
       <Checkbox label="Animate" v-model="isPlay"></Checkbox>
       <Checkbox label="Edge Detect" v-model="isEdgeDetect"></Checkbox>
       <Checkbox label="Turbulence" v-model="isTurbulence"></Checkbox>
+      <button @click="recurse" >Recurse</button>
       <button @click="takeScreenshot" :class="{'highlighted':highlightDownload}">Download Mandala (PNG)</button>
     </div>
   </transition>
@@ -205,6 +206,18 @@ export default {
       domtoimage.toPng(capture.value)
           .then(function (dataUrl) {
             saveAs(dataUrl, 'mandala.png')
+          })
+          .catch(function (error) {
+            console.error('oops, something went wrong!', error);
+          });
+    }
+
+    function recurse() {
+      domtoimage.toBlob(capture.value)
+          .then(function (blob) {
+            var image = new Image();
+            image.src = URL.createObjectURL(blob);
+            selectedFileURL.value = image.src;
           })
           .catch(function (error) {
             console.error('oops, something went wrong!', error);
@@ -363,7 +376,8 @@ export default {
       scrollWheelZoom,
       applyFilters,
       filterBlurEdges,
-      takeScreenshot
+      takeScreenshot,
+      recurse
 
     }
   }
