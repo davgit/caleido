@@ -161,8 +161,8 @@ export default {
 
     let initialX   = ref(0);
     let initialY   = ref(0);
-    let xOffset    = ref(0);
-    let yOffset    = ref(0);
+    let xOffset    = ref(-imgX.value);
+    let yOffset    = ref(-imgY.value);
     let currentX   = ref(0);
     let currentY   = ref(0);
     let isDragging = ref(false);
