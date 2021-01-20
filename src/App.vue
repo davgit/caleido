@@ -68,7 +68,7 @@
     <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
       <input style="display: none" type="file" @change="onFileSelected" ref="fileInput" accept="image/x-png,image/gif,image/jpeg">
       <button @click="$refs.fileInput.click()" :class="{'highlighted':highlightUploadImage}">Upload Image</button>
-      <Select label="Defaults" :options="imageNames" v-model="selectedImage" @change="onSelectImage"></Select>
+      <Select label="Image" :options="imageNames" v-model="selectedImage" @change="onSelectImage"></Select>
       <Select label="Blend Mode" :options="blendModes" v-model="blendMode"></Select>
       <Checkbox label="Circular" v-model="isCircular"></Checkbox>
       <div class="auto-align-container">
