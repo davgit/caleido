@@ -110,7 +110,7 @@ export default {
       Amethyst     : require("./images/Amethyst.jpg"),
       Cuckoo       : require("./images/Cuckoo.jpg"),
       Herbie       : require("./images/Herbie.jpg"),
-      Hilmar       : require("./images/Hilmar.png"),
+      Hilmar       : require("./images/Hilmar.jpg"),
       Teapot       : require("./images/Teapot.jpg"),
       Trumpet       : require("./images/Trumpet.jpg"),
       Flamingo       : require("./images/Flamingo.jpg"),
