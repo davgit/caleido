@@ -91,7 +91,7 @@ import Slider from './components/Slider'
 import Checkbox from './components/Checkbox'
 import Select from './components/Select'
 import {ref, computed, watch } from 'vue'
-import domtoimage from 'dom-to-image'
+import { toPng, toBlob } from 'dom-to-image'
 
 
 export default {
@@ -203,7 +203,7 @@ export default {
     }
 
     function takeScreenshot() {
-      domtoimage.toPng(capture.value)
+      toPng(capture.value)
           .then(function (dataUrl) {
             saveAs(dataUrl, 'mandala.png')
           })
@@ -213,7 +213,7 @@ export default {
     }
 
     function recurse() {
-      domtoimage.toBlob(capture.value)
+      toBlob(capture.value)
           .then(function (blob) {
             var image = new Image();
             image.src = URL.createObjectURL(blob);
