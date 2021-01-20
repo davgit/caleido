@@ -17,6 +17,8 @@
       <Slider label="Slice Width" :min="0.1"  :max="1000" v-model.number="sliceWidth"   :step="0.1" ></Slider>
       <Slider label="Slice Height" :min="0.1" :max="1000" v-model.number="sliceHeight"  :step="0.1" ></Slider>
       <Slider label="Scale"       :min="0.01" :max="10"   v-model.number="scale"        :step="0.1" ></Slider>
+      <!--Slider label="imageX"       :min="0" :max="100"   v-model.number="imgX"          :step="1" ></Slider>
+      <Slider label="imageY"       :min="0" :max="100"   v-model.number="imgY"          :step="1" ></Slider-->
       <Slider label="SliceAngle"  :min="0"    :max="100"  v-model.number="sliceAngle"   :step="0.1" ></Slider>
       <Slider label="Rotate"      :min="0"    :max="360"  v-model.number="rotateValue"  :step="0.1" ></Slider>
       <Slider label="Zoom"        :min="1"    :max="1000" v-model.number="zoom"         :step="0.1" ></Slider>
@@ -103,7 +105,7 @@ export default {
   },
   setup(){
     let imageNames    = ["Karina", "Amethyst", "Cuckoo", "Herbie", "Hilmar", "Teapot", "Trumpet", "Flamingo", "Calavera"].sort();
-    let selectedImage = ref("Cuckoo");
+    let selectedImage = ref("Trumpet");
     let images = {
       Karina       : require("./images/Karina.jpg"),
       Amethyst     : require("./images/Amethyst.jpg"),
@@ -121,7 +123,7 @@ export default {
     let highlightDownload = ref(false);
     let highlightSettings = ref(false);
     let capture         = ref(null);
-    let selectedFileURL = ref(images.Cuckoo);
+    let selectedFileURL = ref(images.Trumpet);
     let imageURL        = computed( () => { if(selectedFileURL.value){ return selectedFileURL.value } } );
     let NValue          = ref(6);
     let rotateValue     = ref(60);
@@ -130,9 +132,9 @@ export default {
     let circumRadius    = computed(() => { return Math.sqrt(Math.pow(sliceWidth.value/2, 2) + Math.pow(sliceHeight.value, 2))});
     let sideLength      = computed(() => { return 2*sliceHeight.value*Math.tan(Math.PI/NValue.value)});
     let sliceAngle      = ref(100);
-    let imgX            = ref(1);
-    let imgY            = ref(1);
-    let zoom            = ref(200);
+    let imgX            = ref(70);
+    let imgY            = ref(183);
+    let zoom            = ref(223);
     let opacity         = ref(1);
     let scale           = ref(1);
     let sync            = ref(true);
@@ -484,7 +486,7 @@ select {
 
 
 .imageContainer {
-  background-image:url(images/Cuckoo.jpg);
+  background-image:url(images/Trumpet.jpg);
   width:400px;
   height:400px;
   position:absolute;
