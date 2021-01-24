@@ -47,6 +47,7 @@
           v-for="n in NValue"
           :key="n" class="imageContainer"
           @mousedown="startDrag($event)"
+          @touchstart="startDrag($event)"
           @wheel.prevent="scrollWheelZoom($event)"
           :style="{
               'background-image'   : imgImageURL(),
@@ -290,6 +291,8 @@ export default {
 
         document.addEventListener("mousemove", drag);
         document.addEventListener("mouseup", endDrag);
+        document.addEventListener("touchmove", drag);
+        document.addEventListener("touchend", endDrag);
       }
     }
 
@@ -301,6 +304,8 @@ export default {
         showCursor();
         document.removeEventListener("mousemove", drag);
         document.removeEventListener("mouseup", endDrag);
+      document.removeEventListener("touchmove", drag);
+      document.removeEventListener("touchend", endDrag);
     }
 
     function drag(e) {
