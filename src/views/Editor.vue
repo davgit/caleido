@@ -67,6 +67,7 @@
 
   <transition name="fade">
     <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
+      <router-link to="/">Home</router-link>
       <input style="display: none" type="file" @change="onFileSelected" ref="fileInput" accept="image/x-png,image/gif,image/jpeg">
       <button @click="$refs.fileInput.click()" :class="{'highlighted':highlightUploadImage}">Upload Image</button>
       <Select label="Image" :options="imageNames" v-model="selectedImage" @change="onSelectImage"></Select>
@@ -88,16 +89,16 @@
 
 <script>
 
-import Filters from './components/Filters'
-import Slider from './components/Slider'
-import Checkbox from './components/Checkbox'
-import Select from './components/Select'
+import Filters from '../components/Filters'
+import Slider from '../components/Slider'
+import Checkbox from '../components/Checkbox'
+import Select from '../components/Select'
 import {ref, computed, watch } from 'vue'
 import { toPng, toBlob } from 'dom-to-image'
 
 
 export default {
-  name: 'App',
+  name: 'Editor',
   components: {
     Slider,
     Checkbox,
@@ -108,15 +109,15 @@ export default {
     let imageNames    = ["Karina", "Amethyst", "Cuckoo", "Herbie", "Hilmar", "Teapot", "Trumpet", "Flamingo", "Calavera"].sort();
     let selectedImage = ref("Trumpet");
     let images = {
-      Karina       : require("./images/Karina.jpg"),
-      Amethyst     : require("./images/Amethyst.png"),
-      Cuckoo       : require("./images/Cuckoo.webp"),
-      Herbie       : require("./images/Herbie.jpg"),
-      Hilmar       : require("./images/Hilmar.jpg"),
-      Teapot       : require("./images/Teapot.jpg"),
-      Trumpet       : require("./images/Trumpet.jpg"),
-      Flamingo       : require("./images/Flamingo.jpg"),
-      Calavera       : require("./images/Calavera.jpg"),
+      Karina       : require("../images/Karina.jpg"),
+      Amethyst     : require("../images/Amethyst.png"),
+      Cuckoo       : require("../images/Cuckoo.webp"),
+      Herbie       : require("../images/Herbie.jpg"),
+      Hilmar       : require("../images/Hilmar.jpg"),
+      Teapot       : require("../images/Teapot.jpg"),
+      Trumpet       : require("../images/Trumpet.jpg"),
+      Flamingo       : require("../images/Flamingo.jpg"),
+      Calavera       : require("../images/Calavera.jpg"),
 
     };
 
@@ -511,7 +512,7 @@ select {
 
 
 .imageContainer {
-  background-image:url(images/Trumpet.jpg);
+  background-image:url(../images/Trumpet.jpg);
   width:400px;
   height:400px;
   position:absolute;

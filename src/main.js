@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import App from './views/App.vue'
+import router from './router'
 
-const mandalaApp = createApp(App);
+createApp(App).use(router).mount('#app');
 
-mandalaApp.mount('#app')
 
