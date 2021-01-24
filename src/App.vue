@@ -47,7 +47,7 @@
           v-for="n in NValue"
           :key="n" class="imageContainer"
           @mousedown="startDrag($event)"
-          @touchstart="startDrag($event)"
+          @touchstart.prevent="startDrag($event)"
           @wheel.prevent="scrollWheelZoom($event)"
           :style="{
               'background-image'   : imgImageURL(),
