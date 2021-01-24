@@ -47,7 +47,7 @@
           v-for="n in NValue"
           :key="n" class="imageContainer"
           @mousedown="startDrag($event)"
-          @touchstart.prevent="startDrag($event)"
+          @touchstart="startDrag($event)"
           @wheel.prevent="scrollWheelZoom($event)"
           :style="{
               'background-image'   : imgImageURL(),
@@ -282,10 +282,15 @@ export default {
     }
 
     function startDrag(e) {
-
       if(e){
-        initialX.value = e.clientX - xOffset.value;
-        initialY.value = e.clientY - yOffset.value;
+
+        if(e.touches) {
+          initialX.value = e.touches[0].clientX - xOffset.value;
+          initialY.value = e.touches[0].clientY - yOffset.value;
+        }else{
+          initialX.value = e.clientX - xOffset.value;
+          initialY.value = e.clientY - yOffset.value;
+        }
         isDragging.value = true;
         hideCursor();
 
@@ -311,9 +316,17 @@ export default {
     function drag(e) {
       if (isDragging.value) {
 
-        e.preventDefault();
-        currentX.value = e.clientX - initialX.value;
-        currentY.value = e.clientY - initialY.value;
+
+        //if touch or mouse
+        if(e.touches){
+          currentX.value = e.touches[0].clientX - initialX.value;
+          currentY.value = e.touches[0].clientY - initialY.value;
+        }else{
+          e.preventDefault();
+          currentX.value = e.clientX - initialX.value;
+          currentY.value = e.clientY - initialY.value;
+        }
+
 
         xOffset.value = currentX.value;
         yOffset.value = currentY.value;
@@ -394,7 +407,13 @@ export default {
 span {
   user-select: none;
 }
+
+html{
+  overflow:hidden;
+}
+
 body {
+  position:relative;
   margin:0;
   padding:0;
   height: 100%;
