@@ -109,14 +109,15 @@ export default {
     let selectedImage = ref("Trumpet");
     let images = {
       Karina       : require("./images/Karina.jpg"),
-      Amethyst     : require("./images/Amethyst.jpg"),
-      Cuckoo       : require("./images/Cuckoo.jpg"),
+      Amethyst     : require("./images/Amethyst.png"),
+      Cuckoo       : require("./images/Cuckoo.webp"),
       Herbie       : require("./images/Herbie.jpg"),
       Hilmar       : require("./images/Hilmar.jpg"),
       Teapot       : require("./images/Teapot.jpg"),
       Trumpet       : require("./images/Trumpet.jpg"),
       Flamingo       : require("./images/Flamingo.jpg"),
       Calavera       : require("./images/Calavera.jpg"),
+
     };
 
     let showWelcome     = ref(true);
