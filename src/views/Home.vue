@@ -15,7 +15,7 @@
 
     </div>
 
-    <div class="bottom-section">
+    <div class="bottom-section" :style="{'bottom': bottomPosition+'%' }">
       <span class="try-text">or try with demo image</span>
       <div class="images-row">
         <DemoImage :url="images.Karina" @click="start(images.Karina)"></DemoImage>
@@ -45,26 +45,26 @@ export default {
     const router = useRouter();
 
     let images = {
-      Karina       : require("../images/Karina.jpg"),
-      Amethyst     : require("../images/Amethyst.png"),
-      Cuckoo       : require("../images/Cuckoo.webp"),
-      Herbie       : require("../images/Herbie.jpg"),
-      Hilmar       : require("../images/Hilmar.jpg"),
-      Teapot       : require("../images/Teapot.jpg"),
-      Trumpet       : require("../images/Trumpet.jpg"),
-      Flamingo       : require("../images/Flamingo.jpg"),
-      Calavera       : require("../images/Calavera.jpg"),
+      Karina  : require("../images/Karina.jpg"),
+      Amethyst: require("../images/Amethyst.png"),
+      Cuckoo  : require("../images/Cuckoo.webp"),
+      Herbie  : require("../images/Herbie.jpg"),
+      Hilmar  : require("../images/Hilmar.jpg"),
+      Teapot  : require("../images/Teapot.jpg"),
+      Trumpet : require("../images/Trumpet.jpg"),
+      Flamingo: require("../images/Flamingo.jpg"),
+      Calavera: require("../images/Calavera.jpg"),
 
     };
 
-    let titleOpacity = ref(0);
+    let titleOpacity        = ref(0);
     let titleReflectOpacity = ref(0);
-    let titleLeft = ref(50);
-    let titleTop = ref(50);
-    let caleidoFontSize = ref(20);
-    let selectedFileURL = ref(null);
-    let fileInput = ref(null);
-    let isDragOver = ref(false);
+    let titleLeft           = ref(50);
+    let titleTop            = ref(50);
+    let selectedFileURL     = ref(null);
+    let fileInput           = ref(null);
+    let isDragOver          = ref(false);
+    let bottomPosition      = ref(-50);
 
     onMounted(() => {
       window.addEventListener("dragover",function(e){
@@ -78,6 +78,9 @@ export default {
         titleOpacity.value = 1;
         titleReflectOpacity.value = 0.05;
       },500);
+      setTimeout(function(){
+        bottomPosition.value = 0;
+      },1500);
 
     });
 
@@ -101,11 +104,11 @@ export default {
       titleReflectOpacity,
       titleLeft,
       titleTop,
-      caleidoFontSize,
       router,
       images,
       fileInput,
       isDragOver,
+      bottomPosition,
       start,
       onChange,
       onDrop
@@ -237,6 +240,9 @@ button:active {
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
+  transition: bottom;
+  transition-duration: 0.7s;
+  transition-timing-function: ease-in-out;
 
 }
 
