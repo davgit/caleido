@@ -9,7 +9,7 @@
         </div>
     <div class="drop-zone" @drop="onDrop" @dragover="isDragOver = true" @dragleave="isDragOver = false" @click="$refs.fileInput.click()">
       <input style="display: none" type="file" @change="onChange" ref="fileInput" accept="image/x-png,image/gif,image/jpeg,image/webp">
-      <div class="drop-text-div">
+      <div class="drop-text-div" :style="{'opacity': titleOpacity}">
         <span class="drop-text" :class="{'highlight': isDragOver}"> Drop Image Here</span>
       </div>
 
@@ -18,12 +18,12 @@
     <div class="bottom-section" :style="{'bottom': bottomPosition+'%' }">
       <span class="try-text">or try with demo image</span>
       <div class="images-row">
-        <DemoImage :url="images.Karina" @click="start(images.Karina)"></DemoImage>
-        <DemoImage :url="images.Cuckoo" @click="start(images.Cuckoo)"></DemoImage>
+        <DemoImage :url="images.Karina"  @click="start(images.Karina)"></DemoImage>
+        <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)"></DemoImage>
         <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)"></DemoImage>
       </div>
       <div class="images-row">
-        <DemoImage :url="images.Herbie" @click="start(images.Herbie)"></DemoImage>
+        <DemoImage :url="images.Herbie"   @click="start(images.Herbie)"></DemoImage>
         <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)"></DemoImage>
         <DemoImage :url="images.Flamingo" @click="start(images.Flamingo)"></DemoImage>
       </div>
@@ -206,13 +206,14 @@ button:active {
  display: flex;
   margin:0 auto;
   margin-bottom:20%;
+  transition: opacity;
+  transition-duration: 3s;
 }
 
 .drop-text {
   font-family: Biysk;
   font-size:2em;
   pointer-events: none;
-
 }
 
 .highlight {
