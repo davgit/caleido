@@ -18,14 +18,14 @@
     <div class="bottom-section" :style="{'bottom': bottomPosition+'%' }">
       <span class="try-text">or try with demo image</span>
       <div class="images-row">
-        <DemoImage :url="images.Karina"  @click="start(images.Karina)" alt="Mandala demo image, Karina"></DemoImage>
-        <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)" alt="Mandala demo image, Cuckoo"></DemoImage>
-        <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Mandala demo image, Trumpet"></DemoImage>
+        <DemoImage :url="images.Karina"  @click="start(images.Karina)" alt="Karina"></DemoImage>
+        <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)" alt="Cuckoo"></DemoImage>
+        <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Trumpet"></DemoImage>
       </div>
       <div class="images-row">
-        <DemoImage :url="images.Herbie"   @click="start(images.Herbie)" alt="Kaleidoscope demo image, Herbie"></DemoImage>
-        <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)" alt="Kaleidoscope demo image, Amethyst"></DemoImage>
-        <DemoImage :url="images.Calavera" @click="start(images.Calavera)" alt="Kaleidoscope demo image, Calavera"></DemoImage>
+        <DemoImage :url="images.Herbie"   @click="start(images.Herbie)" alt="Herbie"></DemoImage>
+        <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)" alt="Amethyst"></DemoImage>
+        <DemoImage :url="images.Calavera" @click="start(images.Calavera)" alt="Calavera"></DemoImage>
       </div>
     </div>
   </div>
