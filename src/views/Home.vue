@@ -19,7 +19,7 @@
       <span class="try-text">or try with demo image</span>
       <div class="images-row">
         <DemoImage :url="images.Karina"  @click="start(images.Karina)" alt="Mandala demo image, Karina"></DemoImage>
-        <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)" alt="Mandala demo image, Cuckoo""></DemoImage>
+        <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)" alt="Mandala demo image, Cuckoo"></DemoImage>
         <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Mandala demo image, Trumpet"></DemoImage>
       </div>
       <div class="images-row">
