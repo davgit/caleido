@@ -6,12 +6,13 @@ const routes = [
 	{
 		path: "/",
 		name: "Home",
-		component: Home,
+		component: Home
 	},
 	{
 		path: "/Editor",
 		name: "Editor",
 		component: Editor,
+		props:true
 	},
 ];
 

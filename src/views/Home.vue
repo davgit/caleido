@@ -1,26 +1,121 @@
 <template>
-  <h1>Caledio</h1>
-  <router-link to="/editor">Start</router-link>
+  <div class="container">
+        <div class="caleido-title-container" :style="{'opacity': titleOpacity}">
+          <span class="caleido-title">caleido</span>
+        </div>
+
+        <div class="caleido-title-container-reflect" :style="{'opacity': titleReflectOpacity}">
+          <span class="caleido-title">caleido</span>
+        </div>
+    <div class="drop-zone" @drop="onDrop" @dragover="isDragOver = true" @dragleave="isDragOver = false" @click="$refs.fileInput.click()">
+      <input style="display: none" type="file" @change="onChange" ref="fileInput" accept="image/x-png,image/gif,image/jpeg,image/webp">
+      <div class="drop-text-div">
+        <span class="drop-text" :class="{'highlight': isDragOver}"> Drop Image Here</span>
+      </div>
+
+    </div>
+
+    <div class="bottom-section">
+      <span class="try-text">or try with demo image</span>
+      <div class="images-row">
+        <DemoImage :url="images.Karina" @click="start(images.Karina)"></DemoImage>
+        <DemoImage :url="images.Cuckoo" @click="start(images.Cuckoo)"></DemoImage>
+        <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)"></DemoImage>
+      </div>
+      <div class="images-row">
+        <DemoImage :url="images.Herbie" @click="start(images.Herbie)"></DemoImage>
+        <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)"></DemoImage>
+        <DemoImage :url="images.Flamingo" @click="start(images.Flamingo)"></DemoImage>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-
+import DemoImage from "@/components/DemoImage";
+import {ref, onMounted} from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'Home',
   components: {
+    DemoImage
   },
   setup(){
+    const router = useRouter();
 
+    let images = {
+      Karina       : require("../images/Karina.jpg"),
+      Amethyst     : require("../images/Amethyst.png"),
+      Cuckoo       : require("../images/Cuckoo.webp"),
+      Herbie       : require("../images/Herbie.jpg"),
+      Hilmar       : require("../images/Hilmar.jpg"),
+      Teapot       : require("../images/Teapot.jpg"),
+      Trumpet       : require("../images/Trumpet.jpg"),
+      Flamingo       : require("../images/Flamingo.jpg"),
+      Calavera       : require("../images/Calavera.jpg"),
 
+    };
+
+    let titleOpacity = ref(0);
+    let titleReflectOpacity = ref(0);
+    let titleLeft = ref(50);
+    let titleTop = ref(50);
+    let caleidoFontSize = ref(20);
+    let selectedFileURL = ref(null);
+    let fileInput = ref(null);
+    let isDragOver = ref(false);
+
+    onMounted(() => {
+      window.addEventListener("dragover",function(e){
+        e.preventDefault();
+      },false);
+      window.addEventListener("drop",function(e){
+        e.preventDefault();
+      },false);
+
+      setTimeout(function(){
+        titleOpacity.value = 1;
+        titleReflectOpacity.value = 0.05;
+      },500);
+
+    });
+
+    function start(image){
+        router.push({name:'Editor', params:{userImage:image}});
+    }
+
+    function onChange(e) {
+      selectedFileURL.value = URL.createObjectURL(e.target.files[0]);
+      router.push({name:'Editor', params:{userImage:selectedFileURL.value}});
+    }
+
+    function onDrop(e){
+      e.preventDefault();
+      selectedFileURL.value = URL.createObjectURL(e.dataTransfer.files[0]);
+      router.push({name:'Editor', params:{userImage:selectedFileURL.value}});
+    }
 
     return{
+      titleOpacity,
+      titleReflectOpacity,
+      titleLeft,
+      titleTop,
+      caleidoFontSize,
+      router,
+      images,
+      fileInput,
+      isDragOver,
+      start,
+      onChange,
+      onDrop
+
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 span {
   user-select: none;
 }
@@ -37,16 +132,26 @@ body {
   overflow: hidden;
   background-color: black;
 }
+
+.container{
+  width:100%;
+  height: 100vh;
+  display:flex;
+  justify-content: center;
+}
+
 button {
   background-color:#111111;
   color:gray;
-  height:30px;
+  height:100px;
   width:100%;
-  border-radius: 20px;
+  border-radius: 100%;
   border:1px solid #1c1c1c;
   outline:none;
   margin:0 auto;
   margin-bottom:10px;
+  font-size:1.5em;
+  font-family: "Biysk";
 }
 button:hover {
   background-color: #262626;
@@ -55,161 +160,102 @@ button:active {
   background-color: #005CC8;
 }
 
-select {
-  background-color:transparent;
-  color:gray;
-  outline:none;
-  border:none;
-  width:150px;
-  margin:0 auto;
-  font-size:1em;
-  margin-bottom:20px;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  display:flex;
-  flex-direction: row;
+@font-face {
+  font-family: "Biysk";
+  src: url("~@/fonts/Biysk.ttf") format("truetype");
 }
 
-.welcome-window {
-  width:80vh;
-  height:80vh;
-  position:absolute;
-  top:50%;
+.caleido-title {
+  font-family: "Biysk";
+  font-size:10vw;
+  font-weight: bold;
+  color: #446d9f;
+  pointer-events: none;
+}
+
+.caleido-title-container {
+
   left:50%;
-  transform: translate(-50%, -50%);
-  border:1px solid white;
-  z-index:99999;
-  border-radius:100%;
-  background-color:rgba(255, 255, 255, 0.8);
-}
-
-.welcome-content {
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
-  position:absolute;
-  width:60%;
-}
-
-.instructions {
-  font-size:1.2em;
-}
-
-.instructions:hover {
-  text-decoration: underline #6262db;
-}
-
-.start-button {
-  width:100px;
-  height:40px;
-  font-size: 1em;
-  color:white;
-  background-color: #005CC8;
-}
-
-.start-button:hover {
-  width:100px;
-  color:white;
-  background-color: #5594e2;
-}
-
-.start-button:active {
-  width:95px;
-  height:40px;
-  color:white;
-  background-color: #5594e2;
-}
-
-
-.imageContainer {
-  background-image:url(../images/Trumpet.jpg);
-  width:400px;
-  height:400px;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform-origin: 50% 0%;
-
-}
-
-.circleWrapper {
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
-  position:absolute;
-  overflow:hidden;
-  border-radius: 100%;
-}
-
-.settingsWindow {
-  width:10%;
-  height:100vh;
-  display:flex;
-  flex-direction: column;
-  padding: 20px 20px;
-  z-index:999;
-  background-color: transparent;
-  transition-duration: 0.5s;
+  top:20%;
+  position: absolute;
+  transform:translate(-50%, -50%);
   transition: opacity;
-  position:absolute;
-  left:0;
+  transition-duration: 3s;
+  pointer-events: none;
 }
 
-.canvasWindow {
+.caleido-title-container-reflect {
+  pointer-events: none;
+  left:50%;
+  top:20%;
+  position: absolute;
+  transform:translate(-50%, 10%) scale(1, -1);
+  -webkit-mask-image: -webkit-gradient(linear, left top,
+  left bottom, from(rgba(0,0,0,0)), to(rgba(0,0,0,1)) );
+  filter: blur(8px);
+  -webkit-filter: blur(3px);
+  opacity:1;
+  transition: opacity;
+  transition-duration: 1.5s;
+}
+
+.drop-text-div {
+ display: flex;
+  margin:0 auto;
+  margin-bottom:20%;
+}
+
+.drop-text {
+  font-family: Biysk;
+  font-size:2em;
+  pointer-events: none;
+
+}
+
+.highlight {
+ font-size:2.1em;
+ font-weight:bold;
+ color: #6fa3e3;;
+}
+
+.drop-zone {
+  width:50vh;
+  height:50vh;
+  flex-direction: column;
+  display:flex;
+  justify-content: flex-end;
+}
+
+.bottom-section {
   width:100%;
-  height:100vh;
-  display:flex;
-  flex-direction: column;
-  padding: 0 20px;
-  overflow:hidden;
-}
-
-.menuWindow {
-  width:13%;
-  height:100vh;
-  display:flex;
-  flex-direction: column;
-  padding: 0 20px;
-  z-index:999;
-  background-color: transparent;
-  padding-top: 20px;
+  height:50vh;
+  bottom:0;
   position:absolute;
-  right:0;
+  border-top:1px solid #222222;
+  background-color: #030303;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 
 }
 
-.auto-align-container {
+.images-row {
+  width:50vh;
+  height:150px;
   display:flex;
-  flex-direction: row;
+  justify-content: space-between;
+  margin:0 auto;
+  margin-bottom: 30px;
 }
 
-.align-button {
-  margin-top:7px;
-  margin-right:50px;
-  width:100px;
-}
-
-.highlighted {
-  outline: 2px dashed #6262db;
-
+.try-text {
+  font-family: Biysk;
+  font-size:1.5em;
+  margin-bottom: 30px;
 }
 
 
 
-.fade-enter,
-.fade-leave-to {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.5s;
-}
 
 </style>

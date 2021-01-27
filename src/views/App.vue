@@ -1,6 +1,5 @@
 <template>
   <router-view />
-
 </template>
 
 <script>
@@ -34,10 +33,25 @@ body {
   background-color: white;
 }
 
-#nav {
-  width:100%;
-  height:20px;
-  border:1px solid white;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  display:flex;
+  flex-direction: row;
+}
+
+.fade-enter,
+.fade-leave-to {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s;
 }
 
 </style>
