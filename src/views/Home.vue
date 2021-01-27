@@ -18,14 +18,14 @@
     <div class="bottom-section" :style="{'bottom': bottomPosition+'%' }">
       <span class="try-text">or try with demo image</span>
       <div class="images-row">
-        <DemoImage :url="images.Karina"  @click="start(images.Karina)"></DemoImage>
-        <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)"></DemoImage>
-        <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)"></DemoImage>
+        <DemoImage :url="images.Karina"  @click="start(images.Karina)" alt="Mandala demo image, Karina"></DemoImage>
+        <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)" alt="Mandala demo image, Cuckoo""></DemoImage>
+        <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Mandala demo image, Trumpet"></DemoImage>
       </div>
       <div class="images-row">
-        <DemoImage :url="images.Herbie"   @click="start(images.Herbie)"></DemoImage>
-        <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)"></DemoImage>
-        <DemoImage :url="images.Flamingo" @click="start(images.Flamingo)"></DemoImage>
+        <DemoImage :url="images.Herbie"   @click="start(images.Herbie)" alt="Kaleidoscope demo image, Herbie"></DemoImage>
+        <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)" alt="Kaleidoscope demo image, Amethyst"></DemoImage>
+        <DemoImage :url="images.Calavera" @click="start(images.Calavera)" alt="Kaleidoscope demo image, Calavera"></DemoImage>
       </div>
     </div>
   </div>
@@ -49,11 +49,9 @@ export default {
       Amethyst: require("../images/Amethyst.png"),
       Cuckoo  : require("../images/Cuckoo.webp"),
       Herbie  : require("../images/Herbie.jpg"),
-      Hilmar  : require("../images/Hilmar.jpg"),
-      Teapot  : require("../images/Teapot.jpg"),
       Trumpet : require("../images/Trumpet.jpg"),
-      Flamingo: require("../images/Flamingo.jpg"),
       Calavera: require("../images/Calavera.jpg"),
+
 
     };
 
