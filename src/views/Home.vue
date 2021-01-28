@@ -190,11 +190,6 @@ button:active {
   background-color: #005CC8;
 }
 
-@font-face {
-  font-family: "Biysk";
-  src: url("~@/fonts/Biysk.ttf") format("truetype");
-}
-
 .caleido-title {
   font-family: "Biysk";
   font-size:10vw;

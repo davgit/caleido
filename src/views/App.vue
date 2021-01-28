@@ -16,6 +16,12 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: "Biysk";
+  src: url("~@/fonts/Biysk.ttf") format("truetype");
+  font-display: swap;
+}
+
 span {
   user-select: none;
 }
