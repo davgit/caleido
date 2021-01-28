@@ -38,7 +38,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #536b85;
+  color: #bcd9f8;
   display:flex;
   flex-direction: row;
 }
