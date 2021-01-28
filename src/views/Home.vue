@@ -199,7 +199,7 @@ button:active {
   font-family: "Biysk";
   font-size:10vw;
   font-weight: bold;
-  color: #446d9f;
+  color: #6d99cf;
   pointer-events: none;
 }
 
