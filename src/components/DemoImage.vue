@@ -46,4 +46,14 @@ setup(props){
   transform: scale(0.95);
 }
 
+@media all and (max-width: 500px) {
+  .demo-image{
+    width:60px;
+    min-width:60px;
+    height:60px;
+    min-height:60px;
+
+  }
+}
+
 </style>
