@@ -44,7 +44,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #536b85;
+  color: #748da9;
   display:flex;
   flex-direction: row;
 }
