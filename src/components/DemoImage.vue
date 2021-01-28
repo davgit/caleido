@@ -23,10 +23,10 @@ setup(props){
 <style scoped>
 
 .demo-image {
-  width:150px;
+  width:100px;
   height:100%;
-  min-width:150px;
-  min-height:150px;
+  min-width:100px;
+  min-height:100px;
   border:1px solid #4c4b4b;
   border-radius: 100%;
   background-image: url('../images/Cuckoo.webp');
@@ -35,6 +35,7 @@ setup(props){
   display: flex;
   margin:0 auto;
   box-shadow: 5px 5px 10px black;
+  background-size: cover;
 }
 
 .demo-image:hover {

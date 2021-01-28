@@ -16,16 +16,37 @@
     </div>
 
     <div class="bottom-section" :style="{'bottom': bottomPosition+'%' }">
-      <span class="try-text">or try with demo image</span>
-      <div class="images-row">
-        <DemoImage :url="images.Karina"  @click="start(images.Karina)" alt="Karina"></DemoImage>
-        <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)" alt="Cuckoo"></DemoImage>
-        <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Trumpet"></DemoImage>
+      <div class="bottom-left">
+
+          <div class="description-container">
+            <h1>We Love Mandalas</h1>
+            <span class="description">There seems to be something pleasing about repetition. The most dull image could contain the most extraordinary patterns when seen through a kaleidoscope.</span>
+          </div>
       </div>
-      <div class="images-row">
-        <DemoImage :url="images.Herbie"   @click="start(images.Herbie)" alt="Herbie"></DemoImage>
-        <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)" alt="Amethyst"></DemoImage>
-        <DemoImage :url="images.Calavera" @click="start(images.Calavera)" alt="Calavera"></DemoImage>
+
+      <div class="bottom-middle">
+        <span class="try-text">or try with demo image</span>
+        <div class="images-row">
+          <DemoImage :url="images.Karina"  @click="start(images.Karina)" alt="Karina"></DemoImage>
+          <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)" alt="Cuckoo"></DemoImage>
+          <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Trumpet"></DemoImage>
+        </div>
+        <div class="images-row">
+          <DemoImage :url="images.Herbie"   @click="start(images.Herbie)" alt="Herbie"></DemoImage>
+          <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)" alt="Amethyst"></DemoImage>
+          <DemoImage :url="images.Calavera" @click="start(images.Calavera)" alt="Calavera"></DemoImage>
+        </div>
+
+      </div>
+      <div class="bottom-right">
+        <div class="description-container-right">
+          <h2>Upload, Remix, Download</h2>
+          <span class="description">Supported file format: JPG, PNG, WEBP, GIF</span><br><br>
+          <span class="description">• mouse click/drag: pan</span><br>
+          <span class="description">• mouse wheel: zoom</span><br>
+          <span class="description">• CTRL+mouse wheel: zoom x 10</span><br><br>
+          <span class="description">Download the current image at any time. Saved as a .PNG with alpha channel. </span><br><br>
+        </div>
       </div>
     </div>
   </div>
@@ -51,8 +72,7 @@ export default {
       Herbie  : require("../images/Herbie.jpg"),
       Trumpet : require("../images/Trumpet.jpg"),
       Calavera: require("../images/Calavera.jpg"),
-
-
+      
     };
 
     let titleOpacity        = ref(0);
@@ -132,6 +152,15 @@ body {
   height: 100%;
   overflow: hidden;
   background-color: black;
+}
+
+h1 {
+  font-family: Biysk;
+}
+
+h2 {
+  font-family: Biysk;
+  text-align: left;
 }
 
 .container{
@@ -236,7 +265,7 @@ button:active {
   border-top:1px solid #222222;
   background-color: #030303;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   overflow: hidden;
   transition: bottom;
@@ -245,13 +274,30 @@ button:active {
 
 }
 
+.bottom-left {
+  width:33%;
+  height:100%;
+}
+
+.bottom-middle {
+  margin-top:20px;
+  width:33%;
+  height:100%;
+}
+
+.bottom-right {
+  width:33%;
+  height:100%;
+}
+
 .images-row {
   width:50vh;
-  height:150px;
+  height:100px;
   display:flex;
   justify-content: space-between;
   margin:0 auto;
   margin-bottom: 30px;
+  margin-top: 30px;
 }
 
 .try-text {
@@ -260,7 +306,22 @@ button:active {
   margin-bottom: 30px;
 }
 
+.description-container {
+  width:60%;
+  margin:0 auto;
+}
 
+.description-container-right {
+  width:60%;
+  margin:0 auto;
+  text-align: left;
+}
+
+
+.description {
+  font-family: Biysk;
+  font-size: 1.1em;
+}
 
 
 </style>
