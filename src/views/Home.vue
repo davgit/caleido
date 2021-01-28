@@ -281,7 +281,6 @@ button:active {
 
 .bottom-middle {
   margin-top:20px;
-  width:33%;
   height:100%;
 }
 
@@ -289,6 +288,16 @@ button:active {
   width:33%;
   height:100%;
 }
+
+@media all and (max-width: 900px) {
+  .bottom-left {
+    display:none;
+  }
+  .bottom-right {
+    display:none;
+  }
+}
+
 
 .images-row {
   width:50vh;
