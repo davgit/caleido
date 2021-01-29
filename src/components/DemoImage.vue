@@ -36,10 +36,12 @@ setup(props){
   margin:0 auto;
   box-shadow: 5px 5px 10px black;
   background-size: cover;
+  cursor: pointer;
 }
 
 .demo-image:hover {
   opacity:0.8;
+  transform: scale(1.02);
 }
 
 .demo-image:active {
