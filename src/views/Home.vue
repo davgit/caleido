@@ -20,7 +20,7 @@
 
           <div class="description-container">
             <h1>We Love Mandalas</h1>
-            <span class="description">There seems to be something pleasing about repetition. The most dull image could contain the most extraordinary patterns when seen through a kaleidoscope.</span>
+            <span class="description">There seems to be something pleasing about repetition. The most dull image can generate the most extraordinary patterns when seen through a kaleidoscope.</span>
           </div>
       </div>
 
