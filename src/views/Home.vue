@@ -19,8 +19,8 @@
       <div class="bottom-left">
 
           <div class="description-container">
-            <h1>We Love Mandalas</h1>
-            <span class="description">There seems to be something pleasing about repetition. The most dull image can generate the most extraordinary patterns when seen through a kaleidoscope.</span>
+            <h1>Looking through a kaleidoscope</h1>
+            <span class="description">There is something pleasing about repetition. Any dull image could generate the most extraordinary patterns when seen through a kaleidoscope.</span>
           </div>
       </div>
 
