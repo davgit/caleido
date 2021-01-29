@@ -45,7 +45,7 @@
           <span class="description">• mouse click/drag: pan</span><br>
           <span class="description">• mouse wheel: zoom</span><br>
           <span class="description">• CTRL+mouse wheel: zoom x 10</span><br><br>
-          <span class="description">Download the current image at any time. Saved as a .PNG with alpha channel. </span><br><br>
+          <span class="description">The final image can be downloaded as a .PNG (with alpha). </span><br><br>
         </div>
       </div>
     </div>
