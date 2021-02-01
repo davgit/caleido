@@ -14,14 +14,13 @@
       <Slider label="Opacity"     :min="0"    :max="1"    v-model.number="opacity"      :step="0.01" ></Slider>
       <Slider label="Blur Image"  :min="0"    :max="100"  v-model.number="blur"         :step="1" ></Slider>
       <Slider label="Blur"        :min="0"    :max="100"  v-model.number="blurEdges"    :step="1" ></Slider>
-      <Slider label="Brightness"  :min="0"    :max="500"  v-model.number="brightness"   :step="1" ></Slider>
-      <Slider label="Contrast"    :min="0"    :max="500"  v-model.number="contrast"     :step="1" ></Slider>
+      <!--Slider label="Brightness"  :min="0"    :max="500"  v-model.number="brightness"   :step="1" ></Slider>
+      <Slider label="Contrast"    :min="0"    :max="500"  v-model.number="contrast"     :step="1" ></Slider-->
       <Slider label="Grayscale"   :min="0"    :max="100"  v-model.number="grayscale"    :step="1" ></Slider>
       <Slider label="Hue"         :min="0"    :max="360"  v-model.number="hueRotate"    :step="1" ></Slider>
       <Slider label="Invert"      :min="0"    :max="100"  v-model.number="invert"       :step="1" ></Slider>
       <Slider label="Saturate"    :min="0"    :max="500"  v-model.number="saturate"     :step="1" ></Slider>
       <Slider label="Sepia"       :min="0"    :max="100"  v-model.number="sepia"        :step="1" ></Slider>
-
     </div>
   </transition>
 
@@ -70,16 +69,20 @@
       <button @click="takeScreenshot">Download Mandala (PNG)</button>
     </div>
   </transition>
-  <img width="75%" ref="screen">
+  <div class="graph-wrapper">
+    <div id="jsxgraph" class="jxgbox"></div>
+  </div>
+
 </template>
 
 <script>
 
+import JXG from 'jsxgraph'
 import Filters from '../components/Filters'
 import Slider from '../components/Slider'
 import Checkbox from '../components/Checkbox'
 import Select from '../components/Select'
-import {ref, computed, watch } from 'vue'
+import {ref, computed, watch, onMounted } from 'vue'
 import { toPng, toBlob } from 'dom-to-image'
 
 
@@ -95,7 +98,7 @@ export default {
     userImage:String
   },
   setup(props){
-
+    let xText, yText;
     let showWelcome     = ref(true);
     let capture         = ref(null);
     let selectedFileURL = ref(props.userImage);
@@ -148,6 +151,9 @@ export default {
     let currentX   = ref(0);
     let currentY   = ref(0);
     let isDragging = ref(false);
+
+    let xName = ref('x');
+    let yName = ref('y');
 
     function startButton() { showWelcome.value = false; }
     function imgImageURL() { return "url('"+imageURL.value+"')" }
@@ -223,7 +229,6 @@ export default {
     watch([isPlay], () => {
       if(isPlay.value) { animate() }
     });
-
 
 
 
@@ -316,6 +321,44 @@ export default {
       }
     }
 
+    onMounted(() => {
+        let board = JXG.JSXGraph.initBoard('jsxgraph', {
+          boundingbox:[-1,10,10,-1],
+          axis:true,
+          grid:true,
+          showCopyright:false,
+          showNavigation:false
+        });
+        xText = board.create('text',[9,0.5,function(){return xName.value}],{color:'white',anchorX:'right'});
+        yText = board.create('text',[0.5,9,function(){return yName.value}],{color:'white'});
+
+        let p1 = board.create('point',[1,1],{name:'BC',label:{color:'white'},snapToGrid:false, size:7, fillColor:'yellow', strokeWidth:0, showInfobox:false});
+        p1.on('drag', function(){
+          brightness.value = p1.X()*50;
+          contrast.value = p1.Y()*50;
+        });
+        p1.on('over', function(){xText.setText('Brightness'); yText.setText('Contrast');})
+        p1.on('out', function(){xText.setText('x'); yText.setText('y');})
+
+
+        let p2 = board.create('point',[4.63,4],{name:'WH',label:{color:'white'},snapToGrid:false, size:7, fillColor:'red', strokeWidth:0, showInfobox:false});
+        p2.on('drag', function(){
+          sliceWidth.value = p2.X()*100;
+          sliceHeight.value = p2.Y()*100;
+        });
+        p2.on('over', function(){xText.setText('Width'); yText.setText('Height');})
+        p2.on('out', function(){xText.setText('x'); yText.setText('y');})
+
+        let p3 = board.create('point',[2.23,1],{name:'ZS',label:{color:'white'},snapToGrid:false, size:7, fillColor:'red', strokeWidth:0, showInfobox:false});
+        p3.on('drag', function(){
+          zoom.value = p3.X()*100;
+          scale.value = p3.Y();
+        });
+        p3.on('over', function(){xText.setText('Zoom'); yText.setText('Scale');})
+        p3.on('out', function(){xText.setText('x'); yText.setText('y');})
+
+    });
+
 
     return{
       NValue,
@@ -391,6 +434,23 @@ body {
   overflow: hidden;
   background-color: black;
 }
+
+#jsxgraph{
+  height:100%;
+  width:100%;
+  z-index:99999;
+}
+
+.graph-wrapper {
+  width:300px;
+  height:300px;
+  display: block;
+  position:absolute;
+  border:1px solid white;
+  bottom:0;
+  left:0;
+}
+
 button {
   background-color:#111111;
   color:gray;
