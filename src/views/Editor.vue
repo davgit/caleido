@@ -40,8 +40,9 @@
   <transition name="fade">
     <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
       <router-link to="/"><button>Main Menu</button></router-link>
-      <Select label="Blend Mode" :options="blendModes" v-model="blendMode"></Select>
+      <button @click="nextBlendMode" label="Blend Mode">Blend Mode  {{blendModes.indexOf(blendMode)}}: {{blendMode}}</button>
       <Checkbox label="Circular" v-model="isCircular"></Checkbox>
+      <Checkbox label="Invert" v-model="isInverted"></Checkbox>
       <div class="auto-align-container">
         <button class="align-button" @click="distributeEven">Align</button>
         <Checkbox label="Auto Align" v-model="isAutoAlign"></Checkbox>
@@ -53,7 +54,7 @@
       <button @click="takeScreenshot">Download Mandala (PNG)</button>
     </div>
   </transition>
-  <div class="graph-wrapper">
+  <div class="graph-wrapper" v-show="!isDragging">
     <div id="jsxgraph" class="jxgbox"></div>
   </div>
 
@@ -65,7 +66,7 @@ import JXG from 'jsxgraph'
 import Filters from '../components/Filters'
 import Slider from '../components/Slider'
 import Checkbox from '../components/Checkbox'
-import Select from '../components/Select'
+//import Select from '../components/Select'
 import {ref, computed, watch, onMounted } from 'vue'
 import { toPng, toBlob } from 'dom-to-image'
 
@@ -75,7 +76,7 @@ export default {
   components: {
     Slider,
     Checkbox,
-    Select,
+    //Select,
     Filters,
   },
   props:{
@@ -116,13 +117,13 @@ export default {
     let contrast        = ref(100);
     let grayscale       = ref(0);
     let hueRotate       = ref(0);
-    let invert          = ref(0);
     let saturate        = ref(100);
     let sepia           = ref(0);
 
     let isPlay          = ref(false);
     let isEdgeDetect          = ref(false);
     let isTurbulence          = ref(false);
+    let isInverted            = ref(false);
     let blendModes      = ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'saturation', 'color', 'luminosity'];
     let actionKeys = {
       Control:{pressed:false}
@@ -158,11 +159,12 @@ export default {
     function filterContrast() { return 'contrast('+contrast.value+'%) ' }
     function filterGrayscale() { return 'grayscale('+grayscale.value+'%) ' }
     function filterHue() {return 'hue-rotate('+hueRotate.value+'deg) '}
-    function filterInvert() {return 'invert('+invert.value+'%) '}
+    function filterInvert() {return 'invert('+(isInverted.value*100)+'%) '}
     function filterSaturate() {return 'saturate('+saturate.value+'%) '}
     function filterSepia() {return 'sepia('+sepia.value+'%) '}
     function filterEdgeDetect() { if(isEdgeDetect.value) { return 'url(#EdgeDetect) ' } else { return '' } }
     function filterTurbulence() { if(isTurbulence.value) { return 'url(#Turbulence) ' } else { return '' } }
+    function nextBlendMode() { blendMode.value = blendModes[blendModes.indexOf(blendMode.value)+1]; }
 
     function saveAs(url, filename) {
       let link = document.createElement('a');
@@ -316,31 +318,33 @@ export default {
         xText = board.create('text',[9,0.5,function(){return xName.value}],{color:'white',anchorX:'right'});
         yText = board.create('text',[0.5,9,function(){return yName.value}],{color:'white'});
 
-        let p1 = board.create('point',[1,1],{name:'BC',label:{color:'white'},snapToGrid:false, size:7, fillColor:'yellow', strokeWidth:0, showInfobox:false});
-        p1.on('drag', function(){
-          brightness.value = p1.X()*50;
-          contrast.value = p1.Y()*50;
-        });
-        p1.on('over', function(){xText.setText('Brightness'); yText.setText('Contrast');})
-        p1.on('out', function(){xText.setText('x'); yText.setText('y');})
+        let graphPoint = function(x,y,name,color,xName,yName,xRef,yRef,xFactor,yFactor, options){
+          console.log(xText)
+          options = options || {};
+          let fullOptions = {name:name,label:{color:'white', autoPosition:true},snapToGrid:false, size:7, fillColor:color, strokeWidth:0, showInfobox:false, ...options}
+          let point = board.create('point',[x,y],fullOptions);
+          point.on('over', function(){xText.setText(xName); yText.setText(yName);})
+          point.on('out', function(){xText.setText('x'); yText.setText('y');})
+          point.coords.on('update', function(){
+            xRef.value = point.X()*xFactor;
+            yRef.value = point.Y()*yFactor;
+          });
+          return point;
+        };
 
 
-        let p2 = board.create('point',[4.63,4],{name:'WH',label:{color:'white'},snapToGrid:false, size:7, fillColor:'red', strokeWidth:0, showInfobox:false});
-        p2.on('drag', function(){
-          sliceWidth.value = p2.X()*100;
-          sliceHeight.value = p2.Y()*100;
-        });
-        p2.on('over', function(){xText.setText('Width'); yText.setText('Height');})
-        p2.on('out', function(){xText.setText('x'); yText.setText('y');})
+      let BC = graphPoint(1,1, 'BC', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50);
+      let WH = graphPoint(4.63,4, 'WH', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100);
+      let ZS = graphPoint(2.23,1, 'ZS', 'blue', 'Zoom', 'Scale', zoom, scale, 100, 1);
+      let HS = graphPoint(0,2, 'HS', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50);
+      let GS = graphPoint(1,0, 'GS', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10);
+      let BB = graphPoint(0,0, 'BB', 'darkgray', 'Blur', 'BlurEdges', blur, blurEdges, 10, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
 
-        let p3 = board.create('point',[2.23,1],{name:'ZS',label:{color:'white'},snapToGrid:false, size:7, fillColor:'red', strokeWidth:0, showInfobox:false});
-        p3.on('drag', function(){
-          zoom.value = p3.X()*100;
-          scale.value = p3.Y();
-        });
-        p3.on('over', function(){xText.setText('Zoom'); yText.setText('Scale');})
-        p3.on('out', function(){xText.setText('x'); yText.setText('y');})
+      console.log(BC,WH,ZS,HS,GS,BB);
 
+
+
+      //board.create('polygon', [BC,WH,ZS,HS,GS],{hasInnerPoints:true, fillColor:'lightgray'});
     });
 
 
@@ -370,12 +374,12 @@ export default {
       contrast,
       grayscale,
       hueRotate,
-      invert,
       saturate,
       sepia,
       isPlay,
       isEdgeDetect,
       isTurbulence,
+      isInverted,
       capture,
       showWelcome,
       startButton,
@@ -394,7 +398,8 @@ export default {
       applyFilters,
       filterBlurEdges,
       takeScreenshot,
-      recurse
+      recurse,
+      nextBlendMode
 
     }
   }
@@ -430,9 +435,8 @@ body {
   height:300px;
   display: block;
   position:absolute;
-  border:1px solid white;
-  bottom:0;
-  left:0;
+  bottom:35%;
+  left:20px;
 }
 
 button {
