@@ -2,25 +2,9 @@
   <Filters></Filters>
   <transition name="fade">
     <div class="settingsWindow" ref="settingsDiv" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
-      <Slider label="Sectors"     :min="3"    :max="120"  v-model.number="NValue"        ></Slider>
-      <Slider label="Slice Width" :min="0.1"  :max="1000" v-model.number="sliceWidth"   :step="0.1" ></Slider>
-      <Slider label="Slice Height" :min="0.1" :max="1000" v-model.number="sliceHeight"  :step="0.1" ></Slider>
-      <Slider label="Scale"       :min="0.01" :max="10"   v-model.number="scale"        :step="0.1" ></Slider>
-      <!--Slider label="imageX"       :min="0" :max="100"   v-model.number="imgX"          :step="1" ></Slider>
-      <Slider label="imageY"       :min="0" :max="100"   v-model.number="imgY"          :step="1" ></Slider-->
-      <Slider label="SliceAngle"  :min="0"    :max="100"  v-model.number="sliceAngle"   :step="0.1" ></Slider>
+      <Slider label="Sectors"     :min="3"    :max="60"  v-model.number="NValue"        ></Slider>
       <Slider label="Rotate"      :min="0"    :max="360"  v-model.number="rotateValue"  :step="0.1" ></Slider>
-      <Slider label="Zoom"        :min="1"    :max="1000" v-model.number="zoom"         :step="0.1" ></Slider>
       <Slider label="Opacity"     :min="0"    :max="1"    v-model.number="opacity"      :step="0.01" ></Slider>
-      <Slider label="Blur Image"  :min="0"    :max="100"  v-model.number="blur"         :step="1" ></Slider>
-      <Slider label="Blur"        :min="0"    :max="100"  v-model.number="blurEdges"    :step="1" ></Slider>
-      <!--Slider label="Brightness"  :min="0"    :max="500"  v-model.number="brightness"   :step="1" ></Slider>
-      <Slider label="Contrast"    :min="0"    :max="500"  v-model.number="contrast"     :step="1" ></Slider-->
-      <Slider label="Grayscale"   :min="0"    :max="100"  v-model.number="grayscale"    :step="1" ></Slider>
-      <Slider label="Hue"         :min="0"    :max="360"  v-model.number="hueRotate"    :step="1" ></Slider>
-      <Slider label="Invert"      :min="0"    :max="100"  v-model.number="invert"       :step="1" ></Slider>
-      <Slider label="Saturate"    :min="0"    :max="500"  v-model.number="saturate"     :step="1" ></Slider>
-      <Slider label="Sepia"       :min="0"    :max="100"  v-model.number="sepia"        :step="1" ></Slider>
     </div>
   </transition>
 
