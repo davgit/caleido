@@ -4,6 +4,10 @@
     <div class="settingsWindow" ref="settingsDiv" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
       <Slider label="Sectors"     :min="3"    :max="60"  v-model.number="NValue"        ></Slider>
       <Slider label="Rotate"      :min="0"    :max="360"  v-model.number="rotateValue"  :step="0.1" ></Slider>
+      <div class="auto-align-container">
+        <button class="align-button" @click="distributeEven">Align</button>
+        <Checkbox label="Auto Align" v-model="isAutoAlign"></Checkbox>
+      </div>
       <Slider label="Opacity"     :min="0"    :max="1"    v-model.number="opacity"      :step="0.01" ></Slider>
     </div>
   </transition>
@@ -43,10 +47,6 @@
       <button @click="nextBlendMode" label="Blend Mode">Blend Mode  {{blendModes.indexOf(blendMode)}}: {{blendMode}}</button>
       <Checkbox label="Circular" v-model="isCircular"></Checkbox>
       <Checkbox label="Invert" v-model="isInverted"></Checkbox>
-      <div class="auto-align-container">
-        <button class="align-button" @click="distributeEven">Align</button>
-        <Checkbox label="Auto Align" v-model="isAutoAlign"></Checkbox>
-      </div>
       <Checkbox label="Animate" v-model="isPlay"></Checkbox>
       <Checkbox label="Edge Detect" v-model="isEdgeDetect"></Checkbox>
       <Checkbox label="Turbulence" v-model="isTurbulence"></Checkbox>
@@ -309,9 +309,9 @@ export default {
 
     onMounted(() => {
         let board = JXG.JSXGraph.initBoard('jsxgraph', {
-          boundingbox:[-1,10,10,-1],
+          boundingbox:[-0.5,10.5,10.5,-0.5],
           axis:true,
-          grid:true,
+          grid:false,
           showCopyright:false,
           showNavigation:false
         });
@@ -333,14 +333,13 @@ export default {
         };
 
 
-      let BC = graphPoint(1,1, 'BC', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50);
-      let WH = graphPoint(4.63,4, 'WH', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100);
-      let ZS = graphPoint(2.23,1, 'ZS', 'blue', 'Zoom', 'Scale', zoom, scale, 100, 1);
-      let HS = graphPoint(0,2, 'HS', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50);
-      let GS = graphPoint(1,0, 'GS', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10);
-      let BB = graphPoint(0,0, 'BB', 'darkgray', 'Blur', 'BlurEdges', blur, blurEdges, 10, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
+      graphPoint(1,1, 'CB', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50);
+      graphPoint(4.63,4, 'HW', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100,{face:'[]'});
+      graphPoint(2.23,1, 'SZ', 'blue', 'Zoom', 'Scale', zoom, scale, 100, 1,{face:'[]'});
+      graphPoint(0,2, 'SH', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50);
+      graphPoint(1,0, 'SG', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10);
+      graphPoint(0,0, 'BB', 'darkgray', 'Blur', 'BlurEdges', blur, blurEdges, 10, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
 
-      console.log(BC,WH,ZS,HS,GS,BB);
 
 
 
@@ -540,12 +539,14 @@ select {
 
 .auto-align-container {
   display:flex;
+  justify-content: flex-start;
   flex-direction: row;
+  margin-top:10px;
 }
 
 .align-button {
   margin-top:7px;
-  margin-right:50px;
+  margin-right:10px;
   width:100px;
 }
 
