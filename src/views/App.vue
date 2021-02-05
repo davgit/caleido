@@ -36,7 +36,7 @@ body {
   padding:0;
   height: 100%;
   overflow: hidden;
-  background-color: white;
+  background-color: black;
 }
 
 #app {

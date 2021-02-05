@@ -1,70 +1,60 @@
 <template>
   <Filters></Filters>
-  <transition name="fade">
-    <div class="settingsWindow" ref="settingsDiv" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
-      <Slider label="Sectors"     :min="3"    :max="60"  v-model.number="NValue"        ></Slider>
-      <Slider label="Rotate"      :min="0"    :max="360"  v-model.number="rotateValue"  :step="0.1" ></Slider>
-      <div class="auto-align-container">
-        <button class="align-button" @click="distributeEven">Align</button>
-        <Checkbox label="Auto Align" v-model="isAutoAlign"></Checkbox>
-      </div>
-      <Slider label="Opacity"     :min="0"    :max="1"    v-model.number="opacity"      :step="0.01" ></Slider>
-    </div>
-  </transition>
+  <div class="editor-container">
 
-  <div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
-    <div class="circleWrapper"
-         :style="{
-            'overflow': isCircular ? 'hidden': 'initial',
-            'width'   : sliceHeight*2*scale+'px',
-            'height'  : sliceHeight*2*scale+'px'
-    }">
-      <div
-          v-for="n in NValue"
-          :key="n" class="imageContainer"
-          @mousedown="startDrag($event)"
-          @touchstart="startDrag($event)"
-          @wheel.prevent="scrollWheelZoom($event)"
-          :style="{
-              'background-image'   : imgImageURL(),
-              'width'              : imgWidth(),
-              'height'             : imgHeight(),
-              'transform'          : imgTransform(n),
-              'clip-path'          : imgClipPath(),
-              'background-position': imgBackgroundPosition(imgX/(zoom/100), imgY/(zoom/100)),
-              'background-size'    : imageSize(),
-              'mix-blend-mode'     : blendMode,
-              'opacity'            : opacity,
-              'filter'             : applyFilters()
-            }">
+    <div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
+      <div class="circleWrapper"
+           :style="{
+              'overflow': isCircular ? 'hidden': 'initial',
+              'width'   : sliceHeight*2*scale+'px',
+              'height'  : sliceHeight*2*scale+'px'
+      }">
+        <div
+            v-for="n in sectors"
+            :key="n" class="imageContainer"
+            @mousedown="startDrag($event)"
+            @touchstart="startDrag($event)"
+            @wheel.prevent="scrollWheelZoom($event)"
+            :style="{
+                'background-image'   : imgImageURL(),
+                'width'              : imgWidth(),
+                'height'             : imgHeight(),
+                'transform'          : imgTransform(n),
+                'clip-path'          : imgClipPath(),
+                'background-position': imgBackgroundPosition(imgX/(zoom/100), imgY/(zoom/100)),
+                'background-size'    : imageSize(),
+                'mix-blend-mode'     : blendMode,
+                'opacity'            : opacity,
+                'filter'             : applyFilters()
+              }">
+        </div>
       </div>
     </div>
-  </div>
 
-  <transition name="fade">
-    <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
-      <router-link to="/"><button>Main Menu</button></router-link>
-      <button @click="nextBlendMode" label="Blend Mode">Blend Mode  {{blendModes.indexOf(blendMode)}}: {{blendMode}}</button>
-      <Checkbox label="Circular" v-model="isCircular"></Checkbox>
-      <Checkbox label="Invert" v-model="isInverted"></Checkbox>
-      <Checkbox label="Animate" v-model="isPlay"></Checkbox>
-      <Checkbox label="Edge Detect" v-model="isEdgeDetect"></Checkbox>
-      <Checkbox label="Turbulence" v-model="isTurbulence"></Checkbox>
-      <button @click="recurse" >Recurse</button>
-      <button @click="takeScreenshot">Download Mandala (PNG)</button>
+    <transition name="fade">
+      <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
+        <router-link to="/"><button>Main Menu</button></router-link>
+        <button @click="nextBlendMode" label="Blend Mode">Blend Mode  {{blendModes.indexOf(blendMode)}}: {{blendMode}}</button>
+        <Checkbox label="Circular" v-model="isCircular"></Checkbox>
+        <Checkbox label="Invert" v-model="isInverted"></Checkbox>
+        <Checkbox label="Animate" v-model="isPlay"></Checkbox>
+        <Checkbox label="Edge Detect" v-model="isEdgeDetect"></Checkbox>
+        <Checkbox label="Turbulence" v-model="isTurbulence"></Checkbox>
+        <button @click="recurse" >Recurse</button>
+        <button @click="takeScreenshot">Download</button>
+      </div>
+    </transition>
+    <div class="graph-wrapper" v-show="!isDragging">
+      <div id="jsxgraph" class="jxgbox"></div>
     </div>
-  </transition>
-  <div class="graph-wrapper" v-show="!isDragging">
-    <div id="jsxgraph" class="jxgbox"></div>
   </div>
-
 </template>
 
 <script>
 
 import JXG from 'jsxgraph'
 import Filters from '../components/Filters'
-import Slider from '../components/Slider'
+//import Slider from '../components/Slider'
 import Checkbox from '../components/Checkbox'
 //import Select from '../components/Select'
 import {ref, computed, watch, onMounted } from 'vue'
@@ -74,7 +64,7 @@ import { toPng, toBlob } from 'dom-to-image'
 export default {
   name: 'Editor',
   components: {
-    Slider,
+    //Slider,
     Checkbox,
     //Select,
     Filters,
@@ -95,12 +85,12 @@ export default {
       }
 
     } );
-    let NValue          = ref(6);
+    let sectors          = ref(6);
     let rotateValue     = ref(60);
     let sliceWidth      = ref(462.9);
     let sliceHeight     = ref(400);
     let circumRadius    = computed(() => { return Math.sqrt(Math.pow(sliceWidth.value/2, 2) + Math.pow(sliceHeight.value, 2))});
-    let sideLength      = computed(() => { return 2*sliceHeight.value*Math.tan(Math.PI/NValue.value)});
+    let sideLength      = computed(() => { return 2*sliceHeight.value*Math.tan(Math.PI/sectors.value)});
     let sliceAngle      = ref(100);
     let imgX            = ref(70);
     let imgY            = ref(183);
@@ -111,7 +101,6 @@ export default {
     let blendMode       = ref("normal");
     let isCircular      = ref(true);
     let isAutoAlign     = ref(true);
-    let blur            = ref(0);
     let blurEdges       = ref(0);
     let brightness      = ref(100);
     let contrast        = ref(100);
@@ -148,12 +137,11 @@ export default {
     function imgWidth() { return sliceWidth.value+'px' }
     function imgHeight() { return sliceHeight.value+'px' }
     function imageSize() { return zoom.value+'% '+zoom.value+'%' }
-    function alignRotation() { rotateValue.value = 360/NValue.value; }
+    function alignRotation() { rotateValue.value = 360/sectors.value; }
     function distributeEven() { alignRotation(); sliceWidth.value = sideLength.value; }
     function hideCursor() { document.body.style.cursor = "none"}
     function showCursor() { document.body.style.cursor = "default"}
-    function applyFilters() {return filterBlur()+filterBrightness()+filterHue()+filterContrast()+filterGrayscale()+filterInvert()+filterSaturate()+filterSepia()+filterEdgeDetect()+filterTurbulence()}
-    function filterBlur() { return 'blur('+blur.value+'px) ' }
+    function applyFilters() {return filterBrightness()+filterHue()+filterContrast()+filterGrayscale()+filterInvert()+filterSaturate()+filterSepia()+filterEdgeDetect()+filterTurbulence()}
     function filterBlurEdges() { return 'blur('+blurEdges.value+'px) ' }
     function filterBrightness() { return 'brightness('+brightness.value+'%) ' }
     function filterContrast() { return 'contrast('+contrast.value+'%) ' }
@@ -208,7 +196,7 @@ export default {
       frame+= 10;
     }
 
-    watch([NValue, isAutoAlign], () => {
+    watch([sectors, isAutoAlign], () => {
       if(isAutoAlign.value) { distributeEven() }
     });
 
@@ -314,22 +302,27 @@ export default {
           grid:false,
           showCopyright:false,
           showNavigation:false,
-          pan:{enabled:false},
-          zoom:{enabled:false}
+          pan:{enabled:false, needTwoFingers:true},
+          zoom:{enabled:false},
+          defaultAxes:{
+            x:{ticks:{label:{visible:false}}},
+            y:{ticks:{label:{visible:false}}}
+          }
         });
         xText = board.create('text',[9,0.5,function(){return xName.value}],{color:'white',anchorX:'right'});
         yText = board.create('text',[0.5,9,function(){return yName.value}],{color:'white'});
-        let hwGraph = board.create('functiongraph',[function(x){return x*0.86}],{strokeColor:'yellow', opacity:0.2, highlight:false,visible:false});
+
+        let hwGraph = board.create('functiongraph',[function(x){return x*sectors.value*0.143}],{strokeColor:'yellow', opacity:0.2, highlight:false,visible:false});
         let graphPoint = function(x,y,name,color,xName,yName,xRef,yRef,xFactor,yFactor, options){
           options = options || {};
           let fullOptions = {
             name:name,
-            label:{color:'white', autoPosition:true, highlight:false},
+            label:{color:'black', highlight:false, offset:[0,0], anchorX:'middle', anchorY:'middle',fontSize:9},
             highlightFillcolor:false,
             highlightStrokeWidth:2,
             highlightStrokeColor:color,
             snapToGrid:false,
-            size:7,
+            size:9,
             fillColor:color,
             strokeWidth:0,
             strokeColor:color,
@@ -346,24 +339,31 @@ export default {
         };
 
 
+      /*graphPoint(5,5, 'XY', 'red', 'X', 'Y', imgX, imgY, zoom.value/10, zoom.value/10);*/
       graphPoint(1,1, 'CB', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50);
       let hw = graphPoint(4.63,4, 'HW', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100,{face:'[]', attractors:[hwGraph], attractorDistance:0.3});
       graphPoint(2.23,1, 'SZ', 'blue', 'Zoom', 'Scale', zoom, scale, 100, 1,{face:'[]'});
       graphPoint(0,2, 'SH', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50);
       graphPoint(1,0, 'SG', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10);
-      graphPoint(0,0, 'BB', 'darkgray', 'Blur', 'BlurEdges', blur, blurEdges, 10, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
+      graphPoint(10,0, 'OB', 'darkgray', 'Opacity', 'BlurEdges', opacity, blurEdges, 0.1, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
 
       hw.on('over',function(){hwGraph.setAttribute({visible:true})});
       hw.on('out',function(){hwGraph.setAttribute({visible:false})});
 
+      let sectorSlider = board.create('slider',[[1,10],[9,10],[3,6,60]],{name:'', snapWidth:1,precision:0, label:{color:'white'},baseline:{strokeColor:'gray'}});
+      sectorSlider.on('drag',function(){
+        sectors.value = this.Value();
+      });
+      sectorSlider.on('over', function(){ xText.setText('Sectors'); yText.setText('(Height)'); yText.setAttribute({color:'yellow'})})
+      sectorSlider.on('out', function(){ xText.setText(''); yText.setText(''); yText.setAttribute({color:'yellow'})})
 
 
-      //board.create('polygon', [BC,WH,ZS,HS,GS],{hasInnerPoints:true, fillColor:'lightgray'});
+
     });
 
 
     return{
-      NValue,
+      sectors,
       rotateValue,
       sliceAngle,
       sliceWidth,
@@ -382,7 +382,6 @@ export default {
       isCircular,
       isAutoAlign,
       isDragging,
-      blur,
       blurEdges,
       brightness,
       contrast,
@@ -421,22 +420,13 @@ export default {
 </script>
 
 <style>
-span {
-  user-select: none;
+
+.editor-container {
+  width:100%;
+  height:100%;
+  display: flex;
 }
 
-html{
-  overflow:hidden;
-}
-
-body {
-  position:relative;
-  margin:0;
-  padding:0;
-  height: 100%;
-  overflow: hidden;
-  background-color: black;
-}
 
 #jsxgraph{
   height:100%;
@@ -482,18 +472,6 @@ select {
   margin-bottom:20px;
 }
 
-.welcome-window {
-  width:80vh;
-  height:80vh;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
-  border:1px solid white;
-  z-index:99999;
-  border-radius:100%;
-  background-color:rgba(255, 255, 255, 0.8);
-}
 
 .imageContainer {
   background-image:url(../images/Trumpet.jpg);
@@ -567,11 +545,37 @@ select {
 
 @media all and (max-width: 799px) {
   .menuWindow {
-    display: none;
+    //display: none;
+    padding-top:0;
+    justify-content: flex-end;
+    width:30%;
+    transform:scale(0.7);
+    transform-origin:bottom right;
   }
   .settingsWindow {
-    display: none;
+    width:3%;
+    justify-content: flex-end;
+    display:none;
   }
+
+  .editor-container {
+    height:100vh;
+    width:100%;
+  }
+
+  .canvasWindow{
+    height:55vh;
+  }
+
+  .graph-wrapper {
+    width:250px;
+    height:250px;
+    display: block;
+    position:absolute;
+    bottom:10px;
+    left:10px;
+  }
+
 }
 
 </style>
