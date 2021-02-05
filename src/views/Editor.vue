@@ -166,7 +166,7 @@ export default {
     function takeScreenshot() {
       toPng(capture.value)
           .then(function (dataUrl) {
-            saveAs(dataUrl, 'mandala.png')
+            saveAs(dataUrl, 'caleido.png')
           })
           .catch(function (error) {
             console.error('oops, something went wrong!', error);
