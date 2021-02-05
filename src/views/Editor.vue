@@ -129,7 +129,6 @@ export default {
     let xName = ref('');
     let yName = ref('');
 
-    function startButton() { showWelcome.value = false; }
     function imgImageURL() { return "url('"+imageURL.value+"')" }
     function imgTransform(n) { return 'translate(-50%, 0%) rotate('+(n*rotateValue.value)+'deg) scale('+scale.value+')' }
     function imgClipPath() { return 'polygon(50% 0%,'+(50-sliceAngle.value/2)+'% 100%, '+(50+sliceAngle.value/2)+'% 100%)' }
@@ -311,8 +310,9 @@ export default {
         });
         xText = board.create('text',[9,0.5,function(){return xName.value}],{color:'white',anchorX:'right'});
         yText = board.create('text',[0.5,9,function(){return yName.value}],{color:'white'});
+        let ratio = 0.1547;
 
-        let hwGraph = board.create('functiongraph',[function(x){return x*sectors.value*0.143}],{strokeColor:'yellow', opacity:0.2, highlight:false,visible:false});
+        let hwGraph = board.create('functiongraph',[function(x){return x*sectors.value*ratio}],{strokeColor:'yellow', opacity:0.2, highlight:false,visible:false});
         let graphPoint = function(x,y,name,color,xName,yName,xRef,yRef,xFactor,yFactor, options){
           options = options || {};
           let fullOptions = {
@@ -339,24 +339,30 @@ export default {
         };
 
 
-      /*graphPoint(5,5, 'XY', 'red', 'X', 'Y', imgX, imgY, zoom.value/10, zoom.value/10);*/
-      graphPoint(1,1, 'CB', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50);
+      graphPoint(1,1, 'CB', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
       let hw = graphPoint(4.63,4, 'HW', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100,{face:'[]', attractors:[hwGraph], attractorDistance:0.3});
       graphPoint(2.23,1, 'SZ', 'blue', 'Zoom', 'Scale', zoom, scale, 100, 1,{face:'[]'});
-      graphPoint(0,2, 'SH', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50);
-      graphPoint(1,0, 'SG', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10);
+      graphPoint(0,2, 'SH', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
+      graphPoint(1,0, 'SG', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
       graphPoint(10,0, 'OB', 'darkgray', 'Opacity', 'BlurEdges', opacity, blurEdges, 0.1, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
 
       hw.on('over',function(){hwGraph.setAttribute({visible:true})});
       hw.on('out',function(){hwGraph.setAttribute({visible:false})});
 
-      let sectorSlider = board.create('slider',[[1,10],[9,10],[3,6,60]],{name:'', snapWidth:1,precision:0, label:{color:'white'},baseline:{strokeColor:'gray'}});
+      let sectorSlider = board.create('slider',[[1,10],[9,10],[3,6,60]],{size:9, name:'', snapWidth:1,precision:0, label:{color:'white'},baseline:{strokeColor:'gray'}});
       sectorSlider.on('drag',function(){
+        hw.free();
         sectors.value = this.Value();
+      });
+      sectorSlider.on('up',function(){
+        hw.setPosition(JXG.COORDS_BY_USER, [hw.Y()/(sectors.value*ratio),hw.Y()]);
       });
       sectorSlider.on('over', function(){ xText.setText('Sectors'); yText.setText('(Height)'); yText.setAttribute({color:'yellow'})})
       sectorSlider.on('out', function(){ xText.setText(''); yText.setText(''); yText.setAttribute({color:'yellow'})})
 
+      window.addEventListener('resize',function(){
+        board.setBoundingBox([-0.5,10.5,10.5,-0.5],true);
+      })
 
 
     });
@@ -395,9 +401,6 @@ export default {
       isInverted,
       capture,
       showWelcome,
-      startButton,
-      alignRotation,
-      distributeEven,
       imgImageURL,
       imgTransform,
       imgClipPath,
@@ -493,19 +496,6 @@ select {
   border-radius: 100%;
 }
 
-.settingsWindow {
-  width:10%;
-  height:100vh;
-  display:flex;
-  flex-direction: column;
-  padding: 20px 20px;
-  z-index:999;
-  background-color: transparent;
-  transition-duration: 0.5s;
-  transition: opacity;
-  position:absolute;
-  left:0;
-}
 
 .canvasWindow {
   width:100%;
@@ -530,18 +520,6 @@ select {
 
 }
 
-.auto-align-container {
-  display:flex;
-  justify-content: flex-start;
-  flex-direction: row;
-  margin-top:10px;
-}
-
-.align-button {
-  margin-top:7px;
-  margin-right:10px;
-  width:100px;
-}
 
 @media all and (max-width: 799px) {
   .menuWindow {
@@ -552,11 +530,6 @@ select {
     transform:scale(0.7);
     transform-origin:bottom right;
   }
-  .settingsWindow {
-    width:3%;
-    justify-content: flex-end;
-    display:none;
-  }
 
   .editor-container {
     height:100vh;
@@ -564,7 +537,7 @@ select {
   }
 
   .canvasWindow{
-    height:55vh;
+    height:50%;
   }
 
   .graph-wrapper {

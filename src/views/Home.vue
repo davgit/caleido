@@ -20,7 +20,7 @@
 
           <div class="description-container">
             <h1>Looking through a kaleidoscope</h1>
-            <span class="description">There is something pleasing about repetition. Any dull image could generate the most extraordinary patterns when seen through a kaleidoscope.</span>
+            <span class="description">There is something pleasing about repetition. Any dull image could generate extraordinary patterns when seen through a kaleidoscope.<br><br> Thanks to <a href="https://unsplash.com/"  target="_blank" rel="noreferrer noopener">Unsplash</a> for random images.</span>
           </div>
       </div>
 
@@ -32,10 +32,15 @@
           <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Trumpet"></DemoImage>
         </div>
         <div class="images-row">
-          <DemoImage :url="images.Herbie"   @click="start(images.Herbie)" alt="Herbie"></DemoImage>
-          <DemoImage :url="images.Amethyst" @click="start(images.Amethyst)" alt="Amethyst"></DemoImage>
-          <DemoImage :url="images.Calavera" @click="start(images.Calavera)" alt="Calavera"></DemoImage>
+          <DemoImage :url="randomImage1" @click="start(randomImage1)" alt="Herbie"></DemoImage>
+          <DemoImage :url="randomImage2" @click="start(randomImage2)" alt="Calavera"></DemoImage>
+          <DemoImage :url="randomImage3" @click="start(randomImage3)" alt="Amethyst"></DemoImage>
         </div>
+        <div class="random-row">
+          <button class="random-button" @click="getRandomImage">Random Image</button>
+        </div>
+
+
 
       </div>
       <div class="bottom-right">
@@ -72,6 +77,22 @@ export default {
       Herbie  : require("../images/Herbie.jpg"),
       Trumpet : require("../images/Trumpet.jpg"),
       Calavera: require("../images/Calavera.jpg"),
+      
+    };
+
+    let randomInteger = function(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    let randomImage1         = ref('https://source.unsplash.com/random/600x600');
+    let randomImage2         = ref('https://source.unsplash.com/random/600x601');
+    let randomImage3         = ref('https://source.unsplash.com/random/600x602');
+    let getRandomImage = function(){
+      randomImage1.value = 'https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99)
+      randomImage2.value = 'https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99)
+      randomImage3.value = 'https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99)
       
     };
 
@@ -127,9 +148,14 @@ export default {
       fileInput,
       isDragOver,
       bottomPosition,
+      randomImage1,
+      randomImage2,
+      randomImage3,
       start,
       onChange,
-      onDrop
+      onDrop,
+      getRandomImage,
+
 
     }
   }
@@ -302,6 +328,17 @@ button:active {
   margin:0 auto;
   margin-bottom: 30px;
   margin-top: 30px;
+}
+
+.random-row {
+  width:200px;
+  height:50px;
+  margin:0 auto;
+}
+
+.random-button{
+  height:50px;
+  border-radius: 30px;
 }
 
 .try-text {
