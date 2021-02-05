@@ -137,8 +137,8 @@ export default {
     let currentY   = ref(0);
     let isDragging = ref(false);
 
-    let xName = ref('x');
-    let yName = ref('y');
+    let xName = ref('');
+    let yName = ref('');
 
     function startButton() { showWelcome.value = false; }
     function imgImageURL() { return "url('"+imageURL.value+"')" }
@@ -313,18 +313,31 @@ export default {
           axis:true,
           grid:false,
           showCopyright:false,
-          showNavigation:false
+          showNavigation:false,
+          pan:{enabled:false},
+          zoom:{enabled:false}
         });
         xText = board.create('text',[9,0.5,function(){return xName.value}],{color:'white',anchorX:'right'});
         yText = board.create('text',[0.5,9,function(){return yName.value}],{color:'white'});
-
+        let hwGraph = board.create('functiongraph',[function(x){return x*0.86}],{strokeColor:'yellow', opacity:0.2, highlight:false,visible:false});
         let graphPoint = function(x,y,name,color,xName,yName,xRef,yRef,xFactor,yFactor, options){
-          console.log(xText)
           options = options || {};
-          let fullOptions = {name:name,label:{color:'white', autoPosition:true},snapToGrid:false, size:7, fillColor:color, strokeWidth:0, showInfobox:false, ...options}
+          let fullOptions = {
+            name:name,
+            label:{color:'white', autoPosition:true, highlight:false},
+            highlightFillcolor:false,
+            highlightStrokeWidth:2,
+            highlightStrokeColor:color,
+            snapToGrid:false,
+            size:7,
+            fillColor:color,
+            strokeWidth:0,
+            strokeColor:color,
+            showInfobox:false,
+            ...options}
           let point = board.create('point',[x,y],fullOptions);
-          point.on('over', function(){xText.setText(xName); yText.setText(yName);})
-          point.on('out', function(){xText.setText('x'); yText.setText('y');})
+          point.on('over', function(){ xText.setAttribute({color:color}); yText.setAttribute({color:color}); xText.setText(xName); yText.setText(yName);})
+          point.on('out', function(){xText.setText(''); yText.setText('');})
           point.coords.on('update', function(){
             xRef.value = point.X()*xFactor;
             yRef.value = point.Y()*yFactor;
@@ -334,12 +347,14 @@ export default {
 
 
       graphPoint(1,1, 'CB', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50);
-      graphPoint(4.63,4, 'HW', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100,{face:'[]'});
+      let hw = graphPoint(4.63,4, 'HW', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100,{face:'[]', attractors:[hwGraph], attractorDistance:0.3});
       graphPoint(2.23,1, 'SZ', 'blue', 'Zoom', 'Scale', zoom, scale, 100, 1,{face:'[]'});
       graphPoint(0,2, 'SH', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50);
       graphPoint(1,0, 'SG', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10);
       graphPoint(0,0, 'BB', 'darkgray', 'Blur', 'BlurEdges', blur, blurEdges, 10, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
 
+      hw.on('over',function(){hwGraph.setAttribute({visible:true})});
+      hw.on('out',function(){hwGraph.setAttribute({visible:false})});
 
 
 
