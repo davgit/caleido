@@ -32,9 +32,9 @@
           <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Trumpet"></DemoImage>
         </div>
         <div class="images-row">
-          <DemoImage :url="randomImage1" @click="start(randomImage1)" alt="Herbie"></DemoImage>
-          <DemoImage :url="randomImage2" @click="start(randomImage2)" alt="Calavera"></DemoImage>
-          <DemoImage :url="randomImage3" @click="start(randomImage3)" alt="Amethyst"></DemoImage>
+          <DemoImage :url="randomImage1" @click="start(randomImage1)" alt="Random1"></DemoImage>
+          <DemoImage :url="randomImage2" @click="start(randomImage2)" alt="Random2"></DemoImage>
+          <DemoImage :url="randomImage3" @click="start(randomImage3)" @mouseover="setSelectedRandom" alt="Random3"></DemoImage>
         </div>
         <div class="random-row">
           <button class="random-button" @click="getRandomImage">Random Image</button>
@@ -55,12 +55,14 @@
       </div>
     </div>
   </div>
+  <div class="image-raw" :style="{'background-image': selectedRandomImage,'background-size':'contain', height:'600px', width:'600px', position:'absolute'}" ref="rawImage"></div>
 </template>
 
 <script>
 import DemoImage from "@/components/DemoImage";
 import {ref, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
+//import {toBlob} from "dom-to-image";
 
 export default {
   name: 'Home',
@@ -69,6 +71,7 @@ export default {
   },
   setup(){
     const router = useRouter();
+    let rawImage        = ref(null);
 
     let images = {
       Karina  : require("../images/Karina.jpg"),
@@ -86,15 +89,37 @@ export default {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
-    let randomImage1         = ref('https://source.unsplash.com/random/600x600');
-    let randomImage2         = ref('https://source.unsplash.com/random/600x601');
-    let randomImage3         = ref('https://source.unsplash.com/random/600x602');
+    let selectedRandomImage = ref('https://source.unsplash.com/random/600x600');
+    let randomImage1         = ref('');
+    let randomImage2         = ref('');
+    let randomImage3         = ref('');
+
     let getRandomImage = function(){
-      randomImage1.value = 'https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99)
-      randomImage2.value = 'https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99)
-      randomImage3.value = 'https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99)
-      
+      var image1, image2, image3;
+      fetch('https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99))
+          .then(response => response.blob())
+          .then(image => {
+            image1 = URL.createObjectURL(image);
+            randomImage1.value = image1;
+          });
+
+      fetch('https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99))
+          .then(response => response.blob())
+          .then(image => {
+            image2 = URL.createObjectURL(image);
+            randomImage2.value = image2;
+          });
+
+      fetch('https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99))
+          .then(response => response.blob())
+          .then(image => {
+            image3 = URL.createObjectURL(image);
+            randomImage3.value = image3;
+          });
     };
+
+    getRandomImage();
+
 
     let titleOpacity        = ref(0);
     let titleReflectOpacity = ref(0);
@@ -124,8 +149,10 @@ export default {
     });
 
     function start(image){
-        router.push({name:'Editor', params:{userImage:image}});
+      //selectedRandomImage.value = 'url('+image+')';
+      router.push({name:'Editor', params:{userImage:image}});
     }
+
 
     function onChange(e) {
       selectedFileURL.value = URL.createObjectURL(e.target.files[0]);
@@ -151,6 +178,8 @@ export default {
       randomImage1,
       randomImage2,
       randomImage3,
+      rawImage,
+      selectedRandomImage,
       start,
       onChange,
       onDrop,
@@ -248,6 +277,16 @@ button:active {
   opacity:1;
   transition: opacity;
   transition-duration: 1.5s;
+}
+
+
+.image-raw {
+  width:800px;
+  height:800px;
+  border:1px solid white;
+  position:absolute;
+  z-index:99999999;
+  display: flex;
 }
 
 .drop-text-div {
@@ -363,6 +402,5 @@ button:active {
   font-family: Biysk;
   font-size: 1.1em;
 }
-
 
 </style>

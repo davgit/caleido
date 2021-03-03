@@ -1,7 +1,6 @@
 <template>
   <Filters></Filters>
   <div class="editor-container">
-
     <div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
       <div class="circleWrapper"
            :style="{
@@ -48,6 +47,7 @@
       <div id="jsxgraph" class="jxgbox"></div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -74,7 +74,6 @@ export default {
   },
   setup(props){
     let xText, yText;
-    let showWelcome     = ref(true);
     let capture         = ref(null);
     let selectedFileURL = ref(props.userImage);
     let imageURL        = computed( () => {
@@ -400,7 +399,6 @@ export default {
       isTurbulence,
       isInverted,
       capture,
-      showWelcome,
       imgImageURL,
       imgTransform,
       imgClipPath,
@@ -548,6 +546,7 @@ select {
     bottom:10px;
     left:10px;
   }
+
 
 }
 
