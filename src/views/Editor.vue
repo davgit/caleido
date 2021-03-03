@@ -3,33 +3,52 @@
   <div class="editor-container">
     <div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
       <div class="circleWrapper"
+
            :style="{
               'overflow': isCircular ? 'hidden': 'initial',
               'width'   : sliceHeight*2*scale+'px',
               'height'  : sliceHeight*2*scale+'px'
       }">
+        <div v-if="sectors !== 2">
+          <div
+              v-for="n in sectors"
+              :key="n"
+              class="imageContainer"
+              @mousedown="startDrag($event)"
+              @touchstart="startDrag($event)"
+              @wheel.prevent="scrollWheelZoom($event)"
+              :style="{
+                  'background-image'   : imgImageURL(),
+                  'width'              : imgWidth(),
+                  'height'             : imgHeight(),
+                  'transform'          : imgTransform(n),
+                  'clip-path'          : imgClipPath(),
+                  'background-position': imgBackgroundPosition(imgX/(zoom/100), imgY/(zoom/100)),
+                  'background-size'    : imageSize(),
+                  'mix-blend-mode'     : blendMode,
+                  'opacity'            : opacity,
+                  'filter'             : applyFilters()
+                }">
+          </div>
+        </div>
         <div
-            v-for="n in sectors"
-            :key="n" class="imageContainer"
+            v-if="sectors === 2"
+            class="imageContainer"
             @mousedown="startDrag($event)"
             @touchstart="startDrag($event)"
             @wheel.prevent="scrollWheelZoom($event)"
             :style="{
                 'background-image'   : imgImageURL(),
-                'width'              : imgWidth(),
-                'height'             : imgHeight(),
-                'transform'          : imgTransform(n),
-                'clip-path'          : imgClipPath(),
-                'background-position': imgBackgroundPosition(imgX/(zoom/100), imgY/(zoom/100)),
-                'background-size'    : imageSize(),
-                'mix-blend-mode'     : blendMode,
+                'width'              : '1200px',
+                'height'             : '1200px',
+                'transform'          : 'translate(-50%, -50%)',
+                'background-position': imgBackgroundPosition(-imgX, imgY),
                 'opacity'            : opacity,
                 'filter'             : applyFilters()
               }">
         </div>
       </div>
     </div>
-
     <transition name="fade">
       <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
         <router-link to="/"><button>Change Image</button></router-link>
@@ -84,7 +103,7 @@ export default {
       }
 
     } );
-    let sectors          = ref(6);
+    let sectors         = ref(6);
     let rotateValue     = ref(60);
     let sliceWidth      = ref(462.9);
     let sliceHeight     = ref(400);
@@ -309,9 +328,7 @@ export default {
         });
         xText = board.create('text',[9,0.5,function(){return xName.value}],{color:'white',anchorX:'right'});
         yText = board.create('text',[0.5,9,function(){return yName.value}],{color:'white'});
-        let ratio = 0.1547;
 
-        let hwGraph = board.create('functiongraph',[function(x){return x*sectors.value*ratio}],{strokeColor:'yellow', opacity:0.2, highlight:false,visible:false});
         let graphPoint = function(x,y,name,color,xName,yName,xRef,yRef,xFactor,yFactor, options){
           options = options || {};
           let fullOptions = {
@@ -339,24 +356,29 @@ export default {
 
 
       graphPoint(1,1, 'CB', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
-      let hw = graphPoint(4.63,4, 'HW', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100,{face:'[]', attractors:[hwGraph], attractorDistance:0.3});
+      let hw = graphPoint(4.63,4, 'HW', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100,{face:'[]'});
       graphPoint(2.23,1, 'SZ', 'blue', 'Zoom', 'Scale', zoom, scale, 100, 1,{face:'[]'});
       graphPoint(0,2, 'SH', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
       graphPoint(1,0, 'SG', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
       graphPoint(10,0, 'OB', 'darkgray', 'Opacity', 'BlurEdges', opacity, blurEdges, 0.1, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
 
-      hw.on('over',function(){hwGraph.setAttribute({visible:true})});
-      hw.on('out',function(){hwGraph.setAttribute({visible:false})});
-
-      let sectorSlider = board.create('slider',[[1,10],[9,10],[3,6,60]],{size:9, name:'', snapWidth:1,precision:0, label:{color:'white'},baseline:{strokeColor:'gray'}});
+      let sectorSlider = board.create('slider',[[1,10],[9,10],[2,6,60]],{size:9, strokeColor:'blue', name:'', snapWidth:1,precision:0, label:{color:'white'},baseline:{strokeColor:'gray'}});
       sectorSlider.on('drag',function(){
         hw.free();
         sectors.value = this.Value();
+        sectorSlider.label.setText(this.Value());
+        if(this.Value() === 2){
+          sectorSlider.label.setText('1')
+        }
       });
-      sectorSlider.on('up',function(){
-        hw.setPosition(JXG.COORDS_BY_USER, [hw.Y()/(sectors.value*ratio),hw.Y()]);
+
+      sectorSlider.on('down',function(){
+        hw.setAttribute({opacity:0.2})
       });
-      sectorSlider.on('over', function(){ xText.setText('Sectors'); yText.setText('(Height)'); yText.setAttribute({color:'yellow'})})
+      hw.on('down',function(){
+        hw.setAttribute({opacity:1})
+      });
+      sectorSlider.on('over', function(){ xText.setText('Sectors'); yText.setText('(Height)'); yText.setAttribute({color:'yellow'}); })
       sectorSlider.on('out', function(){ xText.setText(''); yText.setText(''); yText.setAttribute({color:'yellow'})})
 
       window.addEventListener('resize',function(){
