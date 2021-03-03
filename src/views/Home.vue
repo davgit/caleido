@@ -55,7 +55,6 @@
       </div>
     </div>
   </div>
-  <div class="image-raw" :style="{'background-image': selectedRandomImage,'background-size':'contain', height:'600px', width:'600px', position:'absolute'}" ref="rawImage"></div>
 </template>
 
 <script>
