@@ -40,6 +40,13 @@
           <button class="random-button" @click="getRandomImage">Random Image</button>
         </div>
 
+        <div class="quality-buttons-container">
+          <button class="quality-button" :class="{'selected-quality':quality === 'low' }" @click="setQuality('low');getRandomImage()">Low</button>
+          <button class="quality-button" :class="{'selected-quality':quality === 'medium' }" @click="setQuality('medium');getRandomImage()">Medium</button>
+          <button class="quality-button" :class="{'selected-quality':quality === 'high' }" @click="setQuality('high');getRandomImage()">High</button>
+        </div>
+
+
 
 
       </div>
@@ -71,6 +78,7 @@ export default {
   setup(){
     const router = useRouter();
     let rawImage        = ref(null);
+    let quality = ref('medium');
 
     let images = {
       Karina  : require("../images/Karina.jpg"),
@@ -92,24 +100,26 @@ export default {
     let randomImage1         = ref('');
     let randomImage2         = ref('');
     let randomImage3         = ref('');
+    let resolution = ref(600);
+
 
     let getRandomImage = function(){
       var image1, image2, image3;
-      fetch('https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99))
+      fetch('https://source.unsplash.com/random/'+resolution.value+''+randomInteger(10,99)+'x'+resolution.value+''+randomInteger(10,99))
           .then(response => response.blob())
           .then(image => {
             image1 = URL.createObjectURL(image);
             randomImage1.value = image1;
           });
 
-      fetch('https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99))
+      fetch('https://source.unsplash.com/random/'+resolution.value+''+randomInteger(10,99)+'x'+resolution.value+''+randomInteger(10,99))
           .then(response => response.blob())
           .then(image => {
             image2 = URL.createObjectURL(image);
             randomImage2.value = image2;
           });
 
-      fetch('https://source.unsplash.com/random/6'+randomInteger(10,99)+'x6'+randomInteger(10,99))
+      fetch('https://source.unsplash.com/random/'+resolution.value+''+randomInteger(10,99)+'x'+resolution.value+''+randomInteger(10,99))
           .then(response => response.blob())
           .then(image => {
             image3 = URL.createObjectURL(image);
@@ -119,6 +129,21 @@ export default {
 
     getRandomImage();
 
+    function setQuality(value){
+      quality.value = value;
+      switch(value){
+        case 'low':
+          resolution.value = 6;
+          break;
+        case 'medium':
+          resolution.value = 12;
+          break;
+        case 'high':
+          resolution.value = 20;
+          break;
+      }
+
+    }
 
     let titleOpacity        = ref(0);
     let titleReflectOpacity = ref(0);
@@ -179,6 +204,8 @@ export default {
       randomImage3,
       rawImage,
       selectedRandomImage,
+      quality,
+      setQuality,
       start,
       onChange,
       onDrop,
@@ -305,7 +332,7 @@ button:active {
 .highlight {
  font-size:2.1em;
  font-weight:bold;
- color: #6fa3e3;;
+ color: #6fa3e3;
 }
 
 .drop-zone {
@@ -400,6 +427,24 @@ button:active {
 .description {
   font-family: Biysk;
   font-size: 1.1em;
+}
+
+.quality-buttons-container {
+  width:100%;
+  height:30px;
+  margin-top: 20px;
+}
+
+.quality-button {
+  width:100px;
+  height:20px;
+  font-size:0.8em;
+  border-radius: 10px;
+  margin:5px;
+}
+
+.selected-quality {
+  border:2px solid #6fa3e3;
 }
 
 </style>

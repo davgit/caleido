@@ -32,7 +32,7 @@
 
     <transition name="fade">
       <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
-        <router-link to="/"><button>Main Menu</button></router-link>
+        <router-link to="/"><button>Change Image</button></router-link>
         <button @click="nextBlendMode" label="Blend Mode">Blend Mode  {{blendModes.indexOf(blendMode)}}: {{blendMode}}</button>
         <Checkbox label="Circular" v-model="isCircular"></Checkbox>
         <Checkbox label="Invert" v-model="isInverted"></Checkbox>
