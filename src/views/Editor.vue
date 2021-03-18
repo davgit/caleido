@@ -100,7 +100,7 @@ export default {
       if(selectedFileURL.value){
         return selectedFileURL.value
       } else {
-        return require("../images/Karina.jpg")
+        return;
       }
 
     } );
@@ -500,7 +500,6 @@ select {
 
 
 .imageContainer {
-  background-image:url(../images/Trumpet.jpg);
   width:400px;
   height:400px;
   position:absolute;

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <div class="bg-image"></div>
         <div class="caleido-title-container" :style="{'opacity': titleOpacity}">
           <span class="caleido-title">caleido</span>
         </div>
@@ -265,6 +266,16 @@ h2 {
   justify-content: center;
 }
 
+.bg-image  {
+  position:absolute;
+  width:100%;
+  height:100%;
+  background-image: url('../images/caleido.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity:0.1;
+}
+
 button {
   background-color:#111111;
   color:gray;
@@ -359,11 +370,12 @@ button:active {
 
 .bottom-section {
   width:100%;
+
   height:50vh;
   bottom:0;
   position:absolute;
   border-top:1px solid #222222;
-  background-color: #030303;
+  background-color: rgb(10, 12, 15, 0.3);
   display: flex;
   flex-direction: row;
   justify-content: center;

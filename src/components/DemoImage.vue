@@ -29,7 +29,6 @@ setup(props){
   min-height:100px;
   border:1px solid #4c4b4b;
   border-radius: 100%;
-  background-image: url('../images/Cuckoo.webp');
   background-size: 100%;
   background-position: center;
   display: flex;
