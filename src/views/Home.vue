@@ -27,14 +27,14 @@
       <div class="bottom-middle">
         <span class="try-text">or try with demo image</span>
         <div class="images-row">
-          <DemoImage :url="images.Karina"  @click="start(images.Karina)" alt="Karina"></DemoImage>
-          <DemoImage :url="images.Cuckoo"  @click="start(images.Cuckoo)" alt="Cuckoo"></DemoImage>
-          <DemoImage :url="images.Trumpet" @click="start(images.Trumpet)" alt="Trumpet"></DemoImage>
-        </div>
-        <div class="images-row">
           <DemoImage :url="randomImage1" @click="start(randomImage1)" alt="Random1"></DemoImage>
           <DemoImage :url="randomImage2" @click="start(randomImage2)" alt="Random2"></DemoImage>
-          <DemoImage :url="randomImage3" @click="start(randomImage3)" @mouseover="setSelectedRandom" alt="Random3"></DemoImage>
+          <DemoImage :url="randomImage3" @click="start(randomImage3)" alt="Random3"></DemoImage>
+        </div>
+        <div class="images-row">
+          <DemoImage :url="randomImage4" @click="start(randomImage4)" alt="Random4"></DemoImage>
+          <DemoImage :url="randomImage5" @click="start(randomImage5)" alt="Random5"></DemoImage>
+          <DemoImage :url="randomImage6" @click="start(randomImage6)" alt="Random6"></DemoImage>
         </div>
         <div class="random-row">
           <button class="random-button" @click="getRandomImage">Random Image</button>
@@ -80,16 +80,6 @@ export default {
     let rawImage        = ref(null);
     let quality = ref('medium');
 
-    let images = {
-      Karina  : require("../images/Karina.jpg"),
-      Amethyst: require("../images/Amethyst.png"),
-      Cuckoo  : require("../images/Cuckoo.webp"),
-      Herbie  : require("../images/Herbie.jpg"),
-      Trumpet : require("../images/Trumpet.jpg"),
-      Calavera: require("../images/Calavera.jpg"),
-      
-    };
-
     let randomInteger = function(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -100,11 +90,14 @@ export default {
     let randomImage1         = ref('');
     let randomImage2         = ref('');
     let randomImage3         = ref('');
+    let randomImage4         = ref('');
+    let randomImage5         = ref('');
+    let randomImage6         = ref('');
     let resolution = ref(600);
 
 
     let getRandomImage = function(){
-      var image1, image2, image3;
+      var image1, image2, image3, image4, image5, image6;
       fetch('https://source.unsplash.com/random/'+resolution.value+''+randomInteger(10,99)+'x'+resolution.value+''+randomInteger(10,99))
           .then(response => response.blob())
           .then(image => {
@@ -124,6 +117,26 @@ export default {
           .then(image => {
             image3 = URL.createObjectURL(image);
             randomImage3.value = image3;
+          });
+      fetch('https://source.unsplash.com/random/'+resolution.value+''+randomInteger(10,99)+'x'+resolution.value+''+randomInteger(10,99))
+          .then(response => response.blob())
+          .then(image => {
+            image4 = URL.createObjectURL(image);
+            randomImage4.value = image4;
+          });
+
+      fetch('https://source.unsplash.com/random/'+resolution.value+''+randomInteger(10,99)+'x'+resolution.value+''+randomInteger(10,99))
+          .then(response => response.blob())
+          .then(image => {
+            image5 = URL.createObjectURL(image);
+            randomImage5.value = image5;
+          });
+
+      fetch('https://source.unsplash.com/random/'+resolution.value+''+randomInteger(10,99)+'x'+resolution.value+''+randomInteger(10,99))
+          .then(response => response.blob())
+          .then(image => {
+            image6 = URL.createObjectURL(image);
+            randomImage6.value = image6;
           });
     };
 
@@ -173,7 +186,6 @@ export default {
     });
 
     function start(image){
-      //selectedRandomImage.value = 'url('+image+')';
       router.push({name:'Editor', params:{userImage:image}});
     }
 
@@ -195,13 +207,15 @@ export default {
       titleLeft,
       titleTop,
       router,
-      images,
       fileInput,
       isDragOver,
       bottomPosition,
       randomImage1,
       randomImage2,
       randomImage3,
+      randomImage4,
+      randomImage5,
+      randomImage6,
       rawImage,
       selectedRandomImage,
       quality,
