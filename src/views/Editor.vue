@@ -52,7 +52,8 @@
     <transition name="fade">
       <div class="menuWindow" v-if="!isDragging" @wheel.prevent="scrollWheelScale($event)">
         <router-link to="/"><button>Change Image</button></router-link>
-        <button @click="nextBlendMode" label="Blend Mode">Blend Mode  {{blendModes.indexOf(blendMode)}}: {{blendMode}}</button>
+        <button @click="nextBlendMode" label="Blend Mode" @mouseover="isHoveringBlendModes = true" @mouseout="isHoveringBlendModes = false">Blend Mode  {{blendModes.indexOf(blendMode)}}: {{blendMode}}</button>
+        <div class="blendmode-hover-text"><span v-if="isHoveringBlendModes" class="small-text">Only has effect on overlaps.<br> Make overlap with <span class="hw-text">HW</span> node.</span></div>
         <Checkbox label="Circular" v-model="isCircular"></Checkbox>
         <Checkbox label="Invert" v-model="isInverted"></Checkbox>
         <Checkbox label="Animate" v-model="isPlay"></Checkbox>
@@ -143,6 +144,7 @@ export default {
     let currentX   = ref(0);
     let currentY   = ref(0);
     let isDragging = ref(false);
+    let isHoveringBlendModes = ref(false);
 
     let xName = ref('');
     let yName = ref('');
@@ -378,7 +380,7 @@ export default {
       hw.on('down',function(){
         hw.setAttribute({opacity:1})
       });
-      sectorSlider.on('over', function(){ xText.setText('Sectors'); yText.setText('(Height)'); yText.setAttribute({color:'yellow'}); })
+      sectorSlider.on('over', function(){ xText.setText('Sectors'); yText.setText(' '); yText.setAttribute({color:'yellow'}); })
       sectorSlider.on('out', function(){ xText.setText(''); yText.setText(''); yText.setAttribute({color:'yellow'})})
 
       window.addEventListener('resize',function(){
@@ -409,6 +411,7 @@ export default {
       isCircular,
       isAutoAlign,
       isDragging,
+      isHoveringBlendModes,
       blurEdges,
       brightness,
       contrast,
@@ -540,6 +543,19 @@ select {
 
 }
 
+.blendmode-hover-text {
+  height:30px;
+  width:100%;
+}
+
+.small-text {
+  font-size: 0.8em;
+}
+
+.hw-text {
+  font-weight: bold;
+  color:yellow;
+}
 
 @media all and (max-width: 799px) {
   .menuWindow {
@@ -568,7 +584,6 @@ select {
     bottom:10px;
     left:10px;
   }
-
 
 }
 
