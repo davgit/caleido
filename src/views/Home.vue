@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="bg-image"></div>
+    <div class="bg-image" :class="{'bg-active':(isHoveringDemo || isDragOver)}"></div>
         <div class="caleido-title-container" :style="{'opacity': titleOpacity}">
           <span class="caleido-title">caleido</span>
         </div>
@@ -28,14 +28,14 @@
       <div class="bottom-middle">
         <span class="try-text">or try with demo image</span>
         <div class="images-row">
-          <DemoImage :url="randomImage1" @click="start(randomImage1)" alt="Random1"></DemoImage>
-          <DemoImage :url="randomImage2" @click="start(randomImage2)" alt="Random2"></DemoImage>
-          <DemoImage :url="randomImage3" @click="start(randomImage3)" alt="Random3"></DemoImage>
+          <DemoImage :url="randomImage1" @click="start(randomImage1)" alt="Random1" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+          <DemoImage :url="randomImage2" @click="start(randomImage2)" alt="Random2" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+          <DemoImage :url="randomImage3" @click="start(randomImage3)" alt="Random3" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
         </div>
         <div class="images-row">
-          <DemoImage :url="randomImage4" @click="start(randomImage4)" alt="Random4"></DemoImage>
-          <DemoImage :url="randomImage5" @click="start(randomImage5)" alt="Random5"></DemoImage>
-          <DemoImage :url="randomImage6" @click="start(randomImage6)" alt="Random6"></DemoImage>
+          <DemoImage :url="randomImage4" @click="start(randomImage4)" alt="Random4" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+          <DemoImage :url="randomImage5" @click="start(randomImage5)" alt="Random5" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+          <DemoImage :url="randomImage6" @click="start(randomImage6)" alt="Random6" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
         </div>
         <div class="random-row">
           <button class="random-button" @click="getRandomImage">Random Image</button>
@@ -63,18 +63,21 @@
       </div>
     </div>
   </div>
+
+  <!--Contact></Contact-->
 </template>
 
 <script>
 import DemoImage from "@/components/DemoImage";
+//import Contact from "@/components/Contact";
 import {ref, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
-//import {toBlob} from "dom-to-image";
 
 export default {
   name: 'Home',
   components: {
-    DemoImage
+    DemoImage,
+    //Contact
   },
   setup(){
     const router = useRouter();
@@ -167,6 +170,7 @@ export default {
     let fileInput           = ref(null);
     let isDragOver          = ref(false);
     let bottomPosition      = ref(-50);
+    let isHoveringDemo      = ref(false);
 
     onMounted(() => {
       window.addEventListener("dragover",function(e){
@@ -210,6 +214,7 @@ export default {
       router,
       fileInput,
       isDragOver,
+      isHoveringDemo,
       bottomPosition,
       randomImage1,
       randomImage2,
@@ -270,10 +275,16 @@ h2 {
   position:absolute;
   width:100%;
   height:100%;
-  background-image: url('../images/caleido.png');
+  background-image: url('../images/caleido2.png');
   background-repeat: no-repeat;
   background-position: center;
-  opacity:0.1;
+  opacity:0.05;
+  transition: all 0.6s ease;
+  z-index: -1;
+}
+
+.bg-active {
+  opacity:0.2;
 }
 
 button {
