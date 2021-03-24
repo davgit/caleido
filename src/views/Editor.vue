@@ -357,10 +357,10 @@ export default {
         };
 
 
-      graphPoint(1,1, 'CB', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
+      graphPoint(1,1, 'CB', 'red', 'Brightness', 'Contrast', brightness, contrast, 50, 50,{snapToGrid:true, snapSizeX:0.1, snapSizeY:0.1});
       let hw = graphPoint(4.63,4, 'HW', 'yellow', 'Width', 'Height', sliceWidth, sliceHeight, 100, 100,{face:'[]'});
       graphPoint(2.23,1, 'SZ', 'blue', 'Zoom', 'Scale', zoom, scale, 100, 1,{face:'[]'});
-      graphPoint(0,2, 'SH', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
+      graphPoint(0,2, 'SH', 'magenta', 'Hue', 'Saturation', hueRotate, saturate, 36, 50,{snapToGrid:true, snapSizeX:0.1, snapSizeY:0.1});
       graphPoint(1,0, 'SG', 'gray', 'Grayscale', 'Sepia', grayscale, sepia, 10, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
       graphPoint(10,0, 'OB', 'darkgray', 'Opacity', 'BlurEdges', opacity, blurEdges, 0.1, 10,{snapToGrid:true, snapSizeX:0.5, snapSizeY:0.5});
 
