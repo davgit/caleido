@@ -13,7 +13,7 @@ const routes = [
 		name: "Editor",
 		component: Editor,
 		props: true
-	},
+	}
 ];
 
 const router = createRouter({
