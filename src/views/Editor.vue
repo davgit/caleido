@@ -1,6 +1,6 @@
 <template>
 	<Filters></Filters>
-	<div :style="{'min-width':dummyContainerWidth, height:'100%;'}"></div>
+	<div class="dummy-container" :style="{'min-width':dummyContainerWidth, height:'100%;'}"></div>
 	<div class="editor-container">
 		<div :style="{'min-height':'3vh', width:'100%'}"></div>
 		<div class="canvasWindow" @wheel.prevent="scrollWheelScale($event)" :style="{'filter': filterBlurEdges()}" ref="capture">
@@ -665,6 +665,7 @@ export default {
 }
 
 
+
 #jsxgraph {
 	height: 100%;
 	width: 100%;
@@ -796,13 +797,24 @@ select {
 
 }
 
-@media all and (max-width: 799px) {
+@media all and (min-width:767px) and (max-width: 1024px) {
+
+	.dummy-container {
+		display:none;
+	}
+
 	.menuWindow {
-		padding-top: 0;
-		justify-content: flex-end;
-		width: 30%;
-		transform: scale(0.7);
-		transform-origin: bottom right;
+
+		width: 50%;
+		position:absolute;
+		right:0;
+		bottom:0;
+		left:unset;
+
+	}
+
+	.blend-image-preview {
+		display:none;
 	}
 
 	.editor-container {
@@ -811,12 +823,53 @@ select {
 	}
 
 	.canvasWindow {
-		height: 50%;
+		transform:scale(0.6) translate(-15%, -30%);
+
 	}
 
 	.graph-wrapper {
-		width: 250px;
-		height: 250px;
+		width: 300px;
+		height: 300px;
+		display: block;
+		position: absolute;
+		bottom: 10px;
+		left: 10px;
+	}
+
+}
+
+@media all and (max-width: 767px) {
+
+	.dummy-container {
+		display:none;
+	}
+
+	.menuWindow {
+
+		width: 40%;
+		position:absolute;
+		right:0;
+		bottom:0;
+		left:unset;
+
+	}
+
+	.blend-image-preview {
+		display:none;
+	}
+
+	.editor-container {
+		height: 100vh;
+		width: 100%;
+	}
+
+	.canvasWindow {
+		transform: scale(0.45) translate(-55%, -55%);
+	}
+
+	.graph-wrapper {
+		width: 150px;
+		height: 150px;
 		display: block;
 		position: absolute;
 		bottom: 10px;

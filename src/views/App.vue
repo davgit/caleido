@@ -45,6 +45,7 @@ body {
 	color: #748da9;
 	display: flex;
 	flex-direction: row;
+	overflow: hidden;
 }
 
 .fade-enter,
