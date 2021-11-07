@@ -77,7 +77,11 @@
 				</router-link>
 				<button @click="newRandomImage(1000)">New Random Image</button>
 				<button @click="takeScreenshot">Download</button>
-				<div class="blend-image-preview" :style="{'background-image': blendImageURL()}"> </div>
+				<div class="blend-image-preview" :style="{'background-image': blendImageURL()}">
+					<div class="clear-blend" @click="clearBlend">
+						x
+					</div>
+				</div>
 				<button @click="setCurrentImageAsBlend">Save as Blend</button>
 				<button @click="nextBlendMode" label="Blend Mode">Blend Mode {{ blendModes.indexOf(blendMode) }}:
 					{{ blendMode }}
@@ -284,6 +288,10 @@ export default {
 
 		function nextBlendMode() {
 			blendMode.value = blendModes[blendModes.indexOf(blendMode.value) + 1];
+		}
+
+		function clearBlend() {
+			blendFileURL.value = "";
 		}
 
 		function saveAs(url, filename) {
@@ -639,7 +647,8 @@ export default {
 			recurse,
 			nextBlendMode,
 			setCurrentImageAsBlend,
-			newRandomImage
+			newRandomImage,
+			clearBlend
 
 		}
 	}
@@ -726,6 +735,20 @@ select {
 	margin-bottom: 10px;
 	background-size: contain;
 	background-repeat: no-repeat;
+	position: relative;
+}
+
+.clear-blend {
+	width:20px;
+	height:20px;
+	position:absolute;
+	right:0;
+	top:0;
+	cursor: pointer;
+}
+
+.clear-blend:active {
+	transform: scale(0.9);
 }
 
 .circleWrapper {
