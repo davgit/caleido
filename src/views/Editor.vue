@@ -75,7 +75,7 @@
 				<router-link to="/">
 					<button>Start Page</button>
 				</router-link>
-				<button @click="newRandomImage(1000)">New Random Image</button>
+				<button @click="newRandomImage(12)">New Random Image</button>
 				<button @click="takeScreenshot">Download</button>
 				<div class="blend-image-preview" :style="{'background-image': blendImageURL()}">
 					blend
@@ -690,13 +690,14 @@ export default {
 button {
 	background-color: #111111;
 	color: gray;
-	height: 30px;
+	height: 26px;
 	width: 100%;
 	border-radius: 20px;
 	border: 1px solid #1c1c1c;
 	outline: none;
 	margin: 0 auto;
 	margin-bottom: 10px;
+	font-size:0.8em
 }
 
 button:hover {
@@ -733,7 +734,7 @@ select {
 	border: 1px solid #424242;
 	width: 200px;
 	height: 200px;
-	margin-top: 20px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 	background-size: contain;
 	background-repeat: no-repeat;

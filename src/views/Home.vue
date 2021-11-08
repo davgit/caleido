@@ -95,7 +95,7 @@ export default {
 	setup() {
 		const router = useRouter();
 		let rawImage = ref(null);
-		let quality = ref('medium');
+		let quality = ref('low');
 
 		let randomInteger = function (min, max) {
 			min = Math.ceil(min);
@@ -110,7 +110,7 @@ export default {
 		let randomImage4 = ref('');
 		let randomImage5 = ref('');
 		let randomImage6 = ref('');
-		let resolution = ref(600);
+		let resolution = ref(6);
 
 
 		let getRandomImage = function () {
