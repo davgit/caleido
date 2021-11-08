@@ -182,7 +182,7 @@ export default {
 		let selectedFileURL = ref(null);
 		let fileInput = ref(null);
 		let isDragOver = ref(false);
-		let bottomPosition = ref(-50);
+		let bottomPosition = ref(0);
 		let isHoveringDemo = ref(false);
 
 		onMounted(() => {
@@ -197,9 +197,6 @@ export default {
 				titleOpacity.value = 1;
 				titleReflectOpacity.value = 0.05;
 			}, 500);
-			setTimeout(function () {
-				bottomPosition.value = 0;
-			}, 1500);
 
 		});
 
@@ -288,7 +285,7 @@ h2 {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background-image: url('../images/caleido2.png');
+	background-image: url('../images/caleido2.webp');
 	background-repeat: no-repeat;
 	background-position: center;
 	opacity: 0.05;
