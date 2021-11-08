@@ -78,6 +78,7 @@
 				<button @click="newRandomImage(1000)">New Random Image</button>
 				<button @click="takeScreenshot">Download</button>
 				<div class="blend-image-preview" :style="{'background-image': blendImageURL()}">
+					blend
 					<div class="clear-blend" @click="clearBlend">
 						x
 					</div>
@@ -737,15 +738,20 @@ select {
 	background-size: contain;
 	background-repeat: no-repeat;
 	position: relative;
+	text-align: left;
+	font-size:0.8em;
+	color: #504646;
 }
 
 .clear-blend {
-	width:20px;
+	width:15px;
 	height:20px;
 	position:absolute;
 	right:0;
 	top:0;
 	cursor: pointer;
+	text-align: center;
+	font-size:1em;
 }
 
 .clear-blend:active {
