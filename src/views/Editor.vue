@@ -84,14 +84,18 @@
 					</div>
 				</div>
 				<button @click="setCurrentImageAsBlend">Save as Blend</button>
-				<button @click="nextBlendMode" label="Blend Mode">Blend Mode {{ blendModes.indexOf(blendMode) }}:
+				<button @click="nextBlendMode">Blend Mode:
 					{{ blendMode }}
+				</button>
+				<button @click="nextImageSizeMode">Image Mode :
+					{{ imageSizeMode }}
 				</button>
 				<button @click="recurse">Recurse</button>
 				<Checkbox label="Circular" v-model="isCircular"></Checkbox>
 				<Checkbox label="Invert" v-model="isInverted"></Checkbox>
 <!--				<Checkbox label="Animate" v-model="isPlay"></Checkbox>-->
 				<Slider label="Animate" :min="-20" :max="20" v-model="animationSpeed"></Slider>
+				<Slider label="Rotate" :min="-360" :max="360" v-model="circleRotateValue"></Slider>
 
 
 			</div>
@@ -144,6 +148,7 @@ export default {
 		});
 		let sectors     = ref(6);
 		let rotateValue = ref(60);
+
 		// let sliceHeight = ref(400);
 		let sliceHeight = ref((window.innerHeight-(window.innerHeight*0.06)) );
 		let sliceWidth  = ref(2 * sliceHeight.value * Math.tan(Math.PI / sectors.value));
@@ -182,6 +187,8 @@ export default {
 		let isAnimating  = ref(false);
 		let isInverted   = ref(false);
 		let blendModes = ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'saturation', 'color', 'luminosity'];
+		let imageSizeMode = ref('Stretch');
+		let imageSizeModes = ['Stretch', 'Fixed', 'Auto'];
 		let actionKeys = {
 			Control: {pressed: false}
 		};
@@ -223,7 +230,15 @@ export default {
 
 		const imgHeight = () => sliceHeight.value + 'px';
 
-		const imageSize = () => zoom.value + '% ' + zoom.value + '%';
+		// const imageSize = () => zoom.value + '% ' + zoom.value + '%';
+		const imageSize = () => {
+			let mode = imageSizeMode.value;
+			if(mode === 'Stretch'){
+				return zoom.value + '% ' + zoom.value + '%';
+			}else{
+				return mode;
+			}
+		};
 
 		const alignRotation = () => {
 			rotateValue.value = 360 / sectors.value;
@@ -288,7 +303,15 @@ export default {
 
 
 		function nextBlendMode() {
-			blendMode.value = blendModes[blendModes.indexOf(blendMode.value) + 1];
+			let next = blendModes.indexOf(blendMode.value) + 1;
+			if(next > blendModes.length-1){ next = 0;}
+			blendMode.value = blendModes[next];
+		}
+
+		function nextImageSizeMode() {
+			let next = imageSizeModes.indexOf(imageSizeMode.value) + 1;
+			if(next > imageSizeModes.length-1){ next = 0;}
+			imageSizeMode.value = imageSizeModes[next];
 		}
 
 		function clearBlend() {
@@ -389,18 +412,6 @@ export default {
 			zoom.value = Math.min(Math.max(10, zoom.value), 1000);
 		}
 
-		// function scrollWheelScale(e) {
-		//
-		// 	if (e.target.className === "imageContainer") {
-		// 		return;
-		// 	}
-		// 	if (actionKeys["Control"].pressed) {
-		// 		scale.value += e.deltaY * -0.001;
-		// 	} else {
-		// 		scale.value += e.deltaY * -0.0001;
-		// 	}
-		// 	scale.value = Math.min(Math.max(0.01, scale.value), 10);
-		// }
 		function scrollWheelScale() { return; }
 
 		let randomInteger = function (min, max) {
@@ -630,6 +641,8 @@ export default {
 			blendImage,
 			sectorImage,
 			animationSpeed,
+			imageSizeMode,
+			imageSizeModes,
 			imgImageURL,
 			blendImageURL,
 			imgTransform,
@@ -649,7 +662,8 @@ export default {
 			nextBlendMode,
 			setCurrentImageAsBlend,
 			newRandomImage,
-			clearBlend
+			clearBlend,
+			nextImageSizeMode,
 
 		}
 	}

@@ -2,11 +2,27 @@
 	<div class="container">
 		<div class="bg-image" :class="{'bg-active':(isHoveringDemo || isDragOver)}"></div>
 		<div class="caleido-title-container" :style="{'opacity': titleOpacity}">
-			<span class="caleido-title">caleido</span>
+			<div class="caleido-title">
+				<span style="color:#a01a58">c</span>
+				<span style="color:#892b64">a</span>
+				<span style="color:#723c70">l</span>
+				<span style="color:#5c4d7d">e</span>
+				<span style="color:#455e89">i</span>
+				<span style="color:#2e6f95">d</span>
+				<span style="color:#1780a1">o</span>
+			</div>
 		</div>
 
 		<div class="caleido-title-container-reflect" :style="{'opacity': titleReflectOpacity}">
-			<span class="caleido-title">caleido</span>
+			<div class="caleido-title">
+				<span style="color:#a01a58">c</span>
+				<span style="color:#892b64">a</span>
+				<span style="color:#723c70">l</span>
+				<span style="color:#5c4d7d">e</span>
+				<span style="color:#455e89">i</span>
+				<span style="color:#2e6f95">d</span>
+				<span style="color:#1780a1">o</span>
+			</div>
 		</div>
 		<div class="drop-zone" @drop="onDrop" @dragover="isDragOver = true" @dragleave="isDragOver = false"
 			@click="$refs.fileInput.click()">
@@ -20,37 +36,49 @@
 
 		<div class="bottom-section" :style="{'bottom': bottomPosition+'%' }">
 			<div class="bottom-left">
-
 				<div class="description-container">
 					<h1>Looking through a kaleidoscope</h1>
-					<span class="description">There is something pleasing about repetition. Any dull image could generate extraordinary patterns when seen through a kaleidoscope.<br><br> Thanks to <a
-						href="https://unsplash.com/" target="_blank" rel="noreferrer noopener">Unsplash</a> for random images.</span>
+					<div class="description">
+						A <a href="https://wikipedia.org/wiki/Kaleidoscope" target="_blank">kaleidoscope</a> is an optical instrument with various reflecting surfaces aligned next to each other at an angle,
+						resulting in some interesting symmetrical patterns. This web application plays around with that concept. I do recommend getting or
+						<a href="https://www.wikihow.com/Make-a-Kaleidoscope" target="_blank">making</a> a real one if you get the chance though.<br><br>Enjoy!
+					</div><br>
+				</div>
+				<div class="thanks-container">
+					<div class="thanks-row">
+						<h3 class="thanks-to"> Thanks to</h3>
+					</div>
+					<div class="thanks-row">
+						<a href="https://vuejs.org/" target="_blank" rel="noreferrer noopener" class="thanks-link">VueJS</a> <span class="thanks-why">Javascript framework</span>
+					</div>
+					<div class="thanks-row">
+						<a href="https://unsplash.com/" target="_blank" rel="noreferrer noopener" class="thanks-link">Unsplash</a> <span class="thanks-why">Random images</span>
+					</div>
+					<div class="thanks-row">
+						<a href="https://jsxgraph.uni-bayreuth.de/wp/index.html/" target="_blank" rel="noreferrer noopener" class="thanks-link">JSXGraph</a> <span class="thanks-why">Graph library</span>
+					</div>
 				</div>
 			</div>
 
 			<div class="bottom-middle">
 				<span class="try-text">or try with demo image</span>
 				<div class="images-row">
-					<DemoImage :url="randomImage1" @click="start(randomImage1)" alt="Random1"
-								@mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
-					<DemoImage :url="randomImage2" @click="start(randomImage2)" alt="Random2"
-								@mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
-					<DemoImage :url="randomImage3" @click="start(randomImage3)" alt="Random3"
-								@mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+					<DemoImage :url="randomImage1" @click="start(randomImage1)" alt="Random1" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+					<DemoImage :url="randomImage2" @click="start(randomImage2)" alt="Random2" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+					<DemoImage :url="randomImage3" @click="start(randomImage3)" alt="Random3" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
 				</div>
 				<div class="images-row">
-					<DemoImage :url="randomImage4" @click="start(randomImage4)" alt="Random4"
-								@mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
-					<DemoImage :url="randomImage5" @click="start(randomImage5)" alt="Random5"
-								@mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
-					<DemoImage :url="randomImage6" @click="start(randomImage6)" alt="Random6"
-								@mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+					<DemoImage :url="randomImage4" @click="start(randomImage4)" alt="Random4" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+					<DemoImage :url="randomImage5" @click="start(randomImage5)" alt="Random5" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
+					<DemoImage :url="randomImage6" @click="start(randomImage6)" alt="Random6" @mouseover="isHoveringDemo = true" @mouseout="isHoveringDemo = false"></DemoImage>
 				</div>
 				<div class="random-row">
 					<button class="random-button" @click="getRandomImage">Random Image</button>
 				</div>
 
+
 				<div class="quality-buttons-container">
+					<span class="resolution-text">Resolution:</span>
 					<button class="quality-button" :class="{'selected-quality':quality === 'low' }"
 							@click="setQuality('low');getRandomImage()">Low
 					</button>
@@ -66,12 +94,17 @@
 			</div>
 			<div class="bottom-right">
 				<div class="description-container-right">
-					<h2>Upload, Remix, Download</h2>
-					<span class="description">Supported file format: JPG, PNG, WEBP, GIF</span><br><br>
-					<span class="description">• mouse click/drag: pan</span><br>
-					<span class="description">• mouse wheel: zoom</span><br>
-					<span class="description">• CTRL+mouse wheel: zoom x 10</span><br><br>
-					<span class="description">The final image can be downloaded as a .PNG (with alpha). </span><br><br>
+					<h3>Pick an image</h3>
+					<span class="description">Drag and drop your own image ( <div class="no-cloud-icon" @mouseover="showNoCloudText = true;" @mouseout="showNoCloudText = false;"></div> ), or pick one from the thousands of random images provided by Unsplash. <br>
+						Set resolution to "Medium" or "High" for better quality images.<br>
+						Supports: JPG, PNG, WEBP, GIF</span><br><br>
+					<span class="no-cloud-text">{{noCloudText}}</span>
+
+					<h3>Remix</h3>
+					<span class="description">Here starts the fun. Use the mouse to drag/zoom inside the kaledioscope. There are plenty of ways to tweak image, play around!
+					</span><br>
+					<h3>Download</h3>
+					<span class="description">Masterpiece? Download the file to your device. The file will be served as a .png with transparent background.</span><br>
 				</div>
 			</div>
 		</div>
@@ -83,7 +116,7 @@
 <script>
 import DemoImage from "@/components/DemoImage";
 //import Contact from "@/components/Contact";
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import {useRouter} from 'vue-router'
 
 export default {
@@ -111,6 +144,14 @@ export default {
 		let randomImage5 = ref('');
 		let randomImage6 = ref('');
 		let resolution = ref(6);
+		let showNoCloudText = ref(false);
+		let noCloudText = computed(function(){
+			if(showNoCloudText.value){
+				return 'The images are never leaving your device. All work happens locally.';
+			}else{
+				return '';
+			}
+		});
 
 
 		let getRandomImage = function () {
@@ -185,6 +226,7 @@ export default {
 		let bottomPosition = ref(0);
 		let isHoveringDemo = ref(false);
 
+
 		onMounted(() => {
 			window.addEventListener("dragover", function (e) {
 				e.preventDefault();
@@ -195,9 +237,8 @@ export default {
 
 			setTimeout(function () {
 				titleOpacity.value = 1;
-				titleReflectOpacity.value = 0.05;
+				titleReflectOpacity.value = 0.15;
 			}, 500);
-
 		});
 
 		function start(image) {
@@ -240,7 +281,8 @@ export default {
 			onChange,
 			onDrop,
 			getRandomImage,
-
+			noCloudText,
+			showNoCloudText,
 
 		}
 	}
@@ -274,6 +316,25 @@ h2 {
 	text-align: left;
 }
 
+h3 {
+	font-family: Biysk;
+	margin-bottom: 5px;
+	font-size: 1.4em;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link, a:visited {
+	color: #6fa3e3;
+}
+
+a:hover {
+	color: #ffffff;
+}
+
+
 .container {
 	width: 100%;
 	height: 100vh;
@@ -296,6 +357,7 @@ h2 {
 .bg-active {
 	opacity: 0.2;
 }
+
 
 button {
 	background-color: #111111;
@@ -354,15 +416,6 @@ button:active {
 }
 
 
-.image-raw {
-	width: 800px;
-	height: 800px;
-	border: 1px solid white;
-	position: absolute;
-	z-index: 99999999;
-	display: flex;
-}
-
 .drop-text-div {
 	display: flex;
 	margin: 0 auto;
@@ -398,7 +451,8 @@ button:active {
 	bottom: 0;
 	position: absolute;
 	border-top: 1px solid #222222;
-	background-color: rgb(10, 12, 15, 0.3);
+	/*background-color: rgb(10, 12, 15, 0.3);*/
+	background-image: linear-gradient(to right, rgba(9,50,63,0.2), rgba(63,10,35,0.2));
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -423,17 +477,6 @@ button:active {
 	width: 33%;
 	height: 100%;
 }
-
-@media all and (max-width: 900px) {
-	.bottom-left {
-		display: none;
-	}
-
-	.bottom-right {
-		display: none;
-	}
-}
-
 
 .images-row {
 	width: 50vh;
@@ -462,9 +505,48 @@ button:active {
 	margin-bottom: 30px;
 }
 
+.resolution-text {
+	font-family: Biysk;
+	font-size: 1.3em;
+	transform: translate(-110%, 30%);
+	position: absolute;
+}
+
 .description-container {
 	width: 60%;
 	margin: 0 auto;
+	margin-bottom: 20px;
+	text-align: left;
+}
+
+.thanks-container {
+	width: 60%;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	font-family: Roboto, sans-serif;
+}
+
+.thanks-to {
+	font-family: Biysk;
+	justify-content: flex-start;
+	margin-bottom: 5px;
+}
+
+.thanks-row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.thanks-link {
+	width:35%;
+	text-align: left;
+}
+
+.thanks-why {
+	width: 65%;
+	text-align: left;
 }
 
 .description-container-right {
@@ -473,10 +555,33 @@ button:active {
 	text-align: left;
 }
 
+.no-cloud-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-image: url('../images/cloud_off.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	border-style: none;
+	transform:translate(0, 5px);
+	opacity:0.7;
+}
+
+.no-cloud-icon:hover {
+	opacity:1;
+}
+
+.no-cloud-text {
+	font-size: 0.8em;
+	font-family: Roboto, sans-serif;
+}
+
 
 .description {
-	font-family: Biysk;
-	font-size: 1.1em;
+	font-family: 'Roboto', sans-serif;
+	font-size: 1em;
+	text-align: left;
+	color: #5e7085;
 }
 
 .quality-buttons-container {
@@ -497,4 +602,36 @@ button:active {
 	border: 2px solid #6fa3e3;
 }
 
+
+/********** RESPONSIVENESS ***********/
+
+
+@media all and (max-width: 1400px) {
+	.description-container,
+	.description-container-right,
+	.thanks-container {
+		width: 80%;
+	}
+
+	.description {
+		font-size: 0.8em;
+	}
+
+	.thanks-why,
+	.thanks-link {
+		font-size: 0.8em;
+	}
+
+}
+
+
+@media all and (max-width: 900px) {
+	.bottom-left {
+		display: none;
+	}
+
+	.bottom-right {
+		display: none;
+	}
+}
 </style>
