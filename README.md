@@ -1,26 +1,12 @@
 # Caleido
 
-Web application for generating kaleidoscopic images. Built with VueJS, Unsplash, Jsxgraph
+![alt text](https://github.com/appeye/caleido/blob/main/src/images/caleido-screenshot.png?raw=true)
+Web application for generating kaleidoscopic images. <br>Built with VueJS, Unsplash, Jsxgraph
+
+https://caleido.app/
 
 ## Project setup
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
