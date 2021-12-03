@@ -1,4 +1,6 @@
-# vue-mandala
+# Caleido
+
+Web application for generating kaleidoscopic images. Built with VueJS, Unsplash, Jsxgraph
 
 ## Project setup
 ```
