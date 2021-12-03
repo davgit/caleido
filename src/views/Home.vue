@@ -55,7 +55,7 @@
 						<a href="https://unsplash.com/" target="_blank" rel="noreferrer noopener" class="thanks-link">Unsplash</a> <span class="thanks-why">Random images</span>
 					</div>
 					<div class="thanks-row">
-						<a href="https://jsxgraph.uni-bayreuth.de/wp/index.html/" target="_blank" rel="noreferrer noopener" class="thanks-link">JSXGraph</a> <span class="thanks-why">Graph library</span>
+						<a href="https://jsxgraph.uni-bayreuth.de/" target="_blank" rel="noreferrer noopener" class="thanks-link">JSXGraph</a> <span class="thanks-why">Graph library</span>
 					</div>
 				</div>
 			</div>
