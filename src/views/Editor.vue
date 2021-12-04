@@ -95,7 +95,6 @@
 				<Checkbox label="Invert" v-model="isInverted"></Checkbox>
 <!--				<Checkbox label="Animate" v-model="isPlay"></Checkbox>-->
 				<Slider label="Animate" :min="-20" :max="20" v-model="animationSpeed"></Slider>
-				<Slider label="Rotate" :min="-360" :max="360" v-model="circleRotateValue"></Slider>
 
 
 			</div>
