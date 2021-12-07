@@ -65,8 +65,19 @@
 					'width'           : sliceHeight+'px',
 					'height'          : sliceHeight+'px',
 					'opacity'         : blendOpacity,
-					'opacity'         : blendOpacity,
 					'filter'          : applyOverlayFilters()
+				}">
+			</div>
+
+			<div
+				id="under-layer"
+				class="under-layer"
+				:style="{
+					'background-image': underLayerImageURL(),
+					'background-size' : '100% 100%',
+					'border-radius'   : isCircular ? '100%'   : '0%',
+					'width'           : sliceHeight+'px',
+					'height'          : sliceHeight+'px',
 				}">
 			</div>
 		</div>
@@ -77,7 +88,7 @@
 				</router-link>
 				<button @click="newRandomImage(12)">New Random Image</button>
 				<button @click="takeScreenshot">Download</button>
-				<div class="blend-image-preview" :style="{'background-image': blendImageURL()}">
+				<div ref="blendImagePreview" class="blend-image-preview" :style="{'background-image': blendImageURL()}">
 					blend
 					<div class="clear-blend" @click="clearBlend">
 						x
@@ -135,6 +146,7 @@ export default {
 		let capture = ref(null);
 		let selectedFileURL = ref(props.userImage);
 		let blendFileURL = ref(false);
+		let underLayerFileURL = ref(false);
 		let imageURL = computed(() => {
 			if (selectedFileURL.value) {
 				return selectedFileURL.value;
@@ -143,6 +155,11 @@ export default {
 		let blendURL = computed(() => {
 			if (blendFileURL.value) {
 				return blendFileURL.value;
+			}
+		});
+		let underLayerURL = computed(() => {
+			if (underLayerFileURL.value) {
+				return underLayerFileURL.value;
 			}
 		});
 		let sectors     = ref(6);
@@ -178,6 +195,8 @@ export default {
 		let blendOpacity = ref(0.1);
 		let blendHue     = ref(0);
 		let blendImage   = ref(false);
+		let blendImagePreview = ref(false);
+
 		let sectorImage   = ref(false);
 
 		let animationSpeed = ref(0);
@@ -201,6 +220,8 @@ export default {
 		let isDragging           = ref(false);
 		let resetGraphButton	 = ref(false);
 		let dummyContainerWidth	 = ref(window.innerWidth/4 + 'px');
+		let underLayerColor 	 = ref('black');
+
 
 		window.addEventListener('resize', function(){
 			if(window.innerWidth/4 < 250){
@@ -219,7 +240,9 @@ export default {
 
 		const blendImageURL = () => "url('" + blendURL.value + "')";
 
-		const imgTransform = n => 'translate(-50%, 0%) rotate(' + (n * rotateValue.value) + 'deg) scale(' + scale.value + ')';
+		const underLayerImageURL = () => "url('" + underLayerURL.value + "')";
+
+		const imgTransform = n => 'translate(-50%, 0%) translateZ(10px) rotate(' + (n * rotateValue.value) + 'deg) scale(' + scale.value + ')';
 
 		const imgClipPath = () => 'polygon(50% 0%,' + (50 - sliceAngle.value / 2) + '% 100%, ' + (50 + sliceAngle.value / 2) + '% 100%)';
 
@@ -313,7 +336,7 @@ export default {
 			imageSizeMode.value = imageSizeModes[next];
 		}
 
-		function clearBlend() {
+		function clearBlend () {
 			blendFileURL.value = "";
 		}
 
@@ -332,7 +355,7 @@ export default {
 					saveAs(dataUrl, 'caleido.png')
 				})
 				.catch(function (error) {
-					console.error('oops, something went wrong!', error);
+					console.error('error, could not take screenshot!', error);
 				});
 		}
 
@@ -344,7 +367,7 @@ export default {
 					selectedFileURL.value = image.src;
 				})
 				.catch(function (error) {
-					console.error('oops, something went wrong!', error);
+					console.error('error, could not do recurse!', error);
 				});
 		}
 
@@ -356,7 +379,19 @@ export default {
 					blendFileURL.value = image.src;
 				})
 				.catch(function (error) {
-					console.error('oops, something went wrong!', error);
+					console.error('error, could not set blend layer!', error);
+				});
+		}
+
+		function setUnderLayerColor() {
+			toBlob(capture.value)
+				.then(function (blob) {
+					var image = new Image();
+					image.src = URL.createObjectURL(blob);
+					underLayerFileURL.value = image.src;
+				})
+				.catch(function (error) {
+					console.error('error, could not set under layer!', error);
 				});
 		}
 
@@ -453,6 +488,7 @@ export default {
 			initialY.value = currentY.value;
 
 			isDragging.value = false;
+			setUnderLayerColor();
 			showCursor();
 			document.removeEventListener("mousemove", drag);
 			document.removeEventListener("mouseup", endDrag);
@@ -616,6 +652,7 @@ export default {
 			sync,
 			imageURL,
 			blendURL,
+			underLayerURL,
 			blendMode,
 			blendModes,
 			circumRadius,
@@ -638,12 +675,15 @@ export default {
 			resetGraphButton,
 			dummyContainerWidth,
 			blendImage,
+			blendImagePreview,
 			sectorImage,
 			animationSpeed,
 			imageSizeMode,
 			imageSizeModes,
+			underLayerColor,
 			imgImageURL,
 			blendImageURL,
+			underLayerImageURL,
 			imgTransform,
 			imgClipPath,
 			imgWidth,
@@ -662,8 +702,7 @@ export default {
 			setCurrentImageAsBlend,
 			newRandomImage,
 			clearBlend,
-			nextImageSizeMode,
-
+			nextImageSizeMode
 		}
 	}
 }
@@ -801,6 +840,20 @@ select {
 	overflow: hidden;
 	pointer-events:none;
 	background-position: -50% -50%;
+}
+
+.under-layer {
+	width:50%;
+	height:50%;
+	left:50%;
+	top:50%;
+	transform: translate(-50%, -50%);
+	position: absolute;
+	z-index:-1;
+	overflow: hidden;
+	pointer-events:none;
+	background-position: -50% -50%;
+	filter: blur(1px);
 }
 
 .menuWindow {
