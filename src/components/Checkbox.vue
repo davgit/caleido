@@ -51,5 +51,6 @@ input {
 	padding: 0;
 	margin: 0;
 	float: right;
+	cursor: pointer;
 }
 </style>

@@ -9,9 +9,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "canvas": "^2.8.0",
     "core-js": "^3.6.5",
     "dom-to-image": "^2.6.0",
-    "jsxgraph": "^1.2.1",
+    "jsxgraph": "^1.4.0",
     "vue": "^3.0.0",
     "vue-analytics": "^5.22.1",
     "vue-loader": "^15.9.6",
