@@ -119,8 +119,8 @@
 					'border-radius'   : isCircular ? '100%'   : '0%',
 					'width'           : sliceHeight+'px',
 					'height'          : sliceHeight+'px',
-					'opacity'         : blendOpacity,
-					'filter'          : applyOverlayFilters()
+					'opacity'         : blendOpacity1,
+					'filter'          : applyOverlayFilters1()
 				}">
 			</div>
 
@@ -136,8 +136,8 @@
 					'border-radius'   : isCircular ? '100%'   : '0%',
 					'width'           : sliceHeight+'px',
 					'height'          : sliceHeight+'px',
-					'opacity'         : blendOpacity,
-					'filter'          : applyOverlayFilters()
+					'opacity'         : blendOpacity2,
+					'filter'          : applyOverlayFilters2()
 				}">
 			</div>
 
@@ -293,8 +293,10 @@ export default {
 		let saturate = ref(100);
 		let sepia = ref(0);
 
-		let blendOpacity = ref(0.1);
-		let blendHue = ref(0);
+		let blendOpacity1 = ref(0.1);
+		let blendOpacity2 = ref(0.1);
+		let blendHue1 = ref(0);
+		let blendHue2 = ref(0);
 		let blendImage1 = ref(false);
 		let blendImage2 = ref(false);
 
@@ -384,8 +386,12 @@ export default {
 			return filterBrightness() + filterHue() + filterContrast() + filterGrayscale() + filterInvert() + filterSaturate() + filterSepia()
 		}
 
-		function applyOverlayFilters() {
-			return filterblendHue()
+		function applyOverlayFilters1() {
+			return filterblendHue1()
+		}
+
+		function applyOverlayFilters2() {
+			return filterblendHue2()
 		}
 
 		function filterBlurEdges() {
@@ -409,8 +415,12 @@ export default {
 			return 'hue-rotate(' + hueRotate.value + 'deg) '
 		}
 
-		function filterblendHue() {
-			return 'hue-rotate(' + blendHue.value + 'deg) '
+		function filterblendHue1() {
+			return 'hue-rotate(' + blendHue1.value + 'deg) '
+		}
+
+		function filterblendHue2() {
+			return 'hue-rotate(' + blendHue2.value + 'deg) '
 		}
 
 		function filterInvert() {
@@ -646,10 +656,14 @@ export default {
 			});
 
 			blend1.create('image', [blendURL1.value,[0,0],[10,10]]);
-			blend1.create('point', [5,5],{showInfoBox:false, withlabel:false});
-			var blend1Circle = blend1.create('circle', [[5,5],[9.5,5]],{fixed:true, highlight:false, showInfoBox:false, withlabel:false});
-			blend1.create('glider', [10,5,blend1Circle],{showInfoBox:false, withlabel:false});
+			let blendPoint1 = blend1.create('point', [5,5],{showInfoBox:false, withlabel:false});
+			// var blend1Circle = blend1.create('circle', [[5,5],[9.5,5]],{fixed:true, highlight:false, showInfoBox:false, withlabel:false});
+			// blend1.create('glider', [10,5,blend1Circle],{showInfoBox:false, withlabel:false});
 
+			blendPoint1.coords.on('update', function () {
+				blendHue1.value = blendPoint1.X() * 36;
+				blendOpacity1.value = blendPoint1.Y() * 0.1;
+			});
 
 			let blend2 = JXG.JSXGraph.initBoard('blendBox2', {
 				boundingbox: [0, 10, 10, 0],
@@ -663,10 +677,14 @@ export default {
 			});
 
 			blend2.create('image', [blendURL2.value,[0,0],[10,10]]);
-			blend2.create('point', [5,5],{showInfoBox:false, withlabel:false});
-			var blend2Circle = blend2.create('circle', [[5,5],[9.5,5]],{fixed:true, highlight:false, showInfoBox:false, withlabel:false});
-			blend2.create('glider', [10,5,blend2Circle],{showInfoBox:false, withlabel:false});
+			let blendPoint2 = blend2.create('point', [5,5],{showInfoBox:false, withlabel:false});
+			// var blend2Circle = blend2.create('circle', [[5,5],[9.5,5]],{fixed:true, highlight:false, showInfoBox:false, withlabel:false});
+			// blend2.create('glider', [10,5,blend2Circle],{showInfoBox:false, withlabel:false});
 
+			blendPoint2.coords.on('update', function () {
+				blendHue2.value = blendPoint2.X() * 36;
+				blendOpacity2.value = blendPoint2.Y() * 0.1;
+			});
 
 			let board = JXG.JSXGraph.initBoard('jsxgraph', {
 				boundingbox: [-0.5, 10.5, 10.5, -0.5],
@@ -740,17 +758,17 @@ export default {
 			let ob = graphPoint(10, 0, 'OB', 'darkgray', 'Opacity', 'BlurEdges', opacity, blurEdges, 0.1, 10);
 
 			//blend-image
-			let blend = graphPoint(5, 1, 'blend', 'darkgray', 'Hue', 'Opacity', blendHue, blendOpacity, 36, 0.1, {
-				face: '[]',
-				size: 15
-			});
+			// let blend = graphPoint(5, 1, 'blend', 'darkgray', 'Hue', 'Opacity', blendHue, blendOpacity, 36, 0.1, {
+			// 	face: '[]',
+			// 	size: 15
+			// });
 
 			resetGraphButton.value.onclick = function () {
 				cb.moveTo([2, 2], 500);
 				sh.moveTo([0, 2], 500);
 				sg.moveTo([1, 0], 500);
 				ob.moveTo([10, 0], 500);
-				blend.moveTo([5, 0], 500);
+				// blend.moveTo([5, 0], 500);
 			}
 
 			let sectorSlider = board.create('slider', [[1, 10], [9, 10], [2, 6, 60]], {
@@ -790,13 +808,15 @@ export default {
 
 		return {
 			animationSpeed,
-			blendHue,
+			blendHue1,
+			blendHue2,
 			blendImage1,
 			blendImage2,
 			blendMode1,
 			blendMode2,
 			blendModes,
-			blendOpacity,
+			blendOpacity1,
+			blendOpacity2,
 			blendURL1,
 			blendURL2,
 			blurEdges,
@@ -837,7 +857,8 @@ export default {
 			topbarTooltipText,
 			zoom,
 			applyFilters,
-			applyOverlayFilters,
+			applyOverlayFilters1,
+			applyOverlayFilters2,
 			blendImageURL1,
 			blendImageURL2,
 			clearBlend1,
